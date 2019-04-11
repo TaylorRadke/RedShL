@@ -3,16 +3,21 @@
 #bold and normal text for formatting
 bold=$(tput bold)
 normal=$(tput sgr0)
+italics=$(tput sitm)
+underline=$(tput smul)
+reset_underline=$(tput rmul)
+standout=$(tput smso)
+end_standout=$(tput rmso)
 
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
 function get_help(){
-    echo "${bold}Usage${normal}: bash IDS.sh file [${bold}options${normal}]"$'\n'
-    echo "${bold}OPTIONS"$'\n'
-    echo " -c name${normal}    Create a verification file called ‘name’ also display a message 'File created'"
-    echo " ${bold}-o name${normal}    Display the results on the screen also save the outputs to an output file"
-    echo " ${bold}--help${normal}     Displays a usage message and exit"
-    exit
+    echo -e "${bold}Usage${normal}: bash IDS.sh ${italics}file${normal} [${bold}options${normal}]\n
+    ${bold}OPTIONS\n
+    \t-c name${normal}\t  Create a verification file called ‘${bold}name${normal}’ also display a message '${bold}File created${normal}'\n
+    \t${bold}-o name${normal}\t  Display the results on the screen also save the outputs to output file ‘${bold}name${normal}’ \n
+    \t${bold}--help${normal}\t  Displays a usage message and exits successfuly"
+    exit 0
 }
 
 #get_args is a function that gets commandline argument flags if provided and stores the flag in flags_set array
@@ -35,7 +40,7 @@ function get_args(){
         #Check for missing flag values
     if [[ ${#flags_set[@]} -ne ${#flag_vals[@]} ]]; then
         echo "Missing an argument"
-        exit
+        exit 1
     fi
 }
 
