@@ -1,39 +1,47 @@
+#This is the main script that is called to run Intrusion Detection System
+
+#bold and normal text for formatting
+bold=$(tput bold)
+normal=$(tput sgr0)
+
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
 function get_help(){
-    echo "Usage: bash IDS.sh file [options]"$'\n'
-    echo "options:"$'\n'
-    echo " -c name    Create a verification file called ‘name’ also display a message 'File created'"
-    echo " -o name    Display the results on the screen also save the outputs to an output file"
+    echo "${bold}Usage${normal}: bash IDS.sh file [${bold}options${normal}]"$'\n'
+    echo "${bold}OPTIONS"$'\n'
+    echo " -c name${normal}    Create a verification file called ‘name’ also display a message 'File created'"
+    echo " ${bold}-o name${normal}    Display the results on the screen also save the outputs to an output file"
+    echo " ${bold}--help${normal}     Displays a usage message and exit"
     exit
 }
 
-#Gets the commandline argument flags if provided and stored them in flags_set
-#and also stores their associated value in flag_vals.
-flags_set={}
-flag_vals={}
-
+#get_args is a function that gets commandline argument flags if provided and stores the flag in flags_set array
+#and its associated value in flag_vals
 function get_args(){
-    flags=0
+    flag_count=0
     for (( i=1; i<=$#; i++)); do
         if [ ${!i} = "-o" ] || [ ${!i} = "-c" ]; then
-            flags_set[$flags]=${!i}
+            flags_set[$flag_count]=${!i}
             j=$((i+1))
-            flas_vals[$flags]=${!j}
-            flags=$((flags+1))
+            if [[ ${!j} != "" ]]; then
+                flag_vals[$flag_count]=${!j}
+            fi
+            flag_count=$((flag_count+1))
         elif [ ${!i} = "--help" ]; then
             get_help
         fi
     done
+
+        #Check for missing flag values
+    if [[ ${#flags_set[@]} -ne ${#flag_vals[@]} ]]; then
+        echo "Missing an argument"
+        exit
+    fi
 }
+
 #Check if no arguments are provided
 if [ $# -eq 0 ]; then
     get_help
 else
     get_args $@
 fi
-
-#Prints out command and associated value for testing purposes
-for ((i = 0; i < ${#flags_set}; i++)); do
-    echo "${flags_set[$i]} ${flags_vals[$i]}"
-done
