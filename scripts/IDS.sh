@@ -1,3 +1,4 @@
+#!/bin/bash
 #This is the main script that is called to run Intrusion Detection System
 
 
