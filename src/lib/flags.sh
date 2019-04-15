@@ -51,11 +51,9 @@ function parse_args {
     done
 }
 
-#Looks through the provided args and checks if the user asked for help
+#Check if the user provided the --help flag
 function help_arg_provided {
     for i in "$@"; do
-        if [ $i = "--help" ]; then
-            get_help
-        fi
+        [ $i = "--help" ] && { get_help; }
     done
 }
