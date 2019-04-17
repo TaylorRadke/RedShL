@@ -4,7 +4,7 @@ FLAGS=("-o" "-c" "--help")
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
 function get_help {
-    echo -e "${bold}Usage${normal}: bash IDS.sh ${underline}FILE${reset_underline} [${bold}options${normal}]\n
+    echo -e "${bold}Usage${normal}: bash RedShL.sh ${underline}FILE${reset_underline} [${bold}options${normal}]\n
     ${underline}${italics}file${normal}${reset_underline}\n 
     ${bold}OPTIONS\n
     \t-c name${normal}\t  Create a verification file called ‘${bold}name${normal}’ also display a message '${bold}File created${normal}'\n
