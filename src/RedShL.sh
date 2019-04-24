@@ -23,11 +23,10 @@ function get_help {
 #Parse args from commandline, from lib/flags
 parse_args $@
 
-# echo $c_FLAG
-# echo $o_FLAG
-
+#Recreate tracking directory if it exists
 rm tracking -rf
 mkdir tracking
 
 #SAve states of input file contents to verification file in ./tracking
+create_verification_file
 verify_input_file
