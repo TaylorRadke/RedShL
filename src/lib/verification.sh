@@ -20,7 +20,7 @@ function print_symbols {
 
  function write_verification_file_headers {
     line_length=${#line}
-    header_length=60
+    header_length=100
 
     print_symbols $header_length "="
     printf "\n| $line" >> $verification_file
@@ -28,14 +28,35 @@ function print_symbols {
     print_symbols $((header_length-3-line_length)) " "
     printf "|\n" >> $verification_file
 
+    print_symbols $header_length "="
+}
+
+function write_file_type {
+    file=$1
+    type=$(file -bpN $file)
+    
+    printf "\n| File Type: " >> $verification_file
+    if [ -f $1 ]; then
+        type="file"
+    elif [ -d $1 ]; then
+        type="directory"
+    fi
+
+    printf "$type" >> $verification_file
+    length=${#type}
+    print_symbols $((header_length - 14 - length)) " "
+    printf "|\n" >> $verification_file
     print_symbols $header_length "-"
-    echo -e "\n" >> $verification_file
 }
 
 function verify_input_file {
     while IFS= read -r line || [ -n "$line" ] ; do
-       write_verification_file_headers
-
-       echo -e "\n" >> $verification_file
+        if [ -e $line ]; then
+            write_verification_file_headers
+            write_file_type $line
+            echo -e "\n" >> $verification_file
+        else
+            echo "Error: file or directory $line does not exist"
+        fi
     done < $file
 }
