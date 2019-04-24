@@ -2,6 +2,7 @@
 
 #Import functions from lib/
 source lib/flags.sh
+source lib/verification.sh
 
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
@@ -22,18 +23,11 @@ function get_help {
 #Parse args from commandline, from lib/flags
 parse_args $@
 
-echo $c_FLAG
-echo $o_FLAG
+# echo $c_FLAG
+# echo $o_FLAG
 
 rm tracking -rf
 mkdir tracking
-cd ./tracking
 
-if [[ $c_FLAG != "" ]]; then
-    verification_file="${c_FLAG}.txt"
-    touch ${verification_file}
-    echo "Verification file Created: $(pwd)/$c_FLAG"
-else
-    verification_file="verify.txt"
-    touch ${verification_file}
-fi
+#SAve states of input file contents to verification file in ./tracking
+verify_input_file
