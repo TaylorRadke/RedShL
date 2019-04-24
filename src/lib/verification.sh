@@ -18,7 +18,7 @@ function print_symbols {
     done
 }
 
- function write_verification_file_headers {
+ function write_file_headers {
     line_length=${#line}
     header_length=100
 
@@ -49,11 +49,22 @@ function write_file_type {
     print_symbols $header_length "-"
 }
 
+function write_full_file_path {
+    full_path=$(readlink -f $1)
+    printf "\n| Full Path: " >> $verification_file
+    printf "$full_path" >> $verification_file
+    
+    print_symbols $((header_length -14 - ${#full_path})) " "
+    printf "|\n" >> $verification_file
+    print_symbols $header_length "-"
+}
+
 function verify_input_file {
     while IFS= read -r line || [ -n "$line" ] ; do
         if [ -e $line ]; then
-            write_verification_file_headers
+            write_file_headers
             write_file_type $line
+            write_full_file_path $line
             echo -e "\n" >> $verification_file
         else
             echo "Error: file or directory $line does not exist"
