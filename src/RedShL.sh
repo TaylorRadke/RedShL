@@ -2,7 +2,6 @@
 
 #Import functions from lib/
 source lib/flags.sh
-source lib/styles.sh
 
 #Get help if no arguments are provided
 [ $# -eq 0 ] && { get_help; }

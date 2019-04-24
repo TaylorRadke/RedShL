@@ -4,13 +4,12 @@ FLAGS=("-o" "-c" "--help")
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
 function get_help {
-    echo -e "${bold}Usage${normal}: bash RedShL.sh ${underline}FILE${reset_underline} [${bold}options${normal}]\n
-    ${underline}${italics}file${normal}${reset_underline}\n 
-    ${bold}OPTIONS\n
-    \t-c name${normal}\t  Create a verification file called ‘${bold}name${normal}’ also display a message '${bold}File created${normal}'\n
-    \t${bold}--help${normal}\t  Display a help message and exit\n
-    \t${bold}-o name${normal}\t  Display the results on the screen also save the outputs to output file ‘${bold}name${normal}’ \n
-    "
+    echo -e "Usage: bash RedShL.sh file[options]\n"
+    echo -e "file\n" 
+    echo -e "OPTIONS\n"
+    echo -e "\t-c name\t  Create a verification file called ‘name’ also display a message 'File created'\n"
+    echo -e "\t--help\t  Display a help message and exit\n"
+    echo -e "\t-o name\t  Display the results on the screen also save the outputs to output file ‘name\n"
     exit
 }
 
