@@ -4,7 +4,7 @@ FLAGS=("-o" "-c" "--help")
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
 function get_help {
-    echo -e "Usage: bash RedShL.sh file[options]\n"
+    echo -e "Usage: bash RedShL.sh file [OPTIONS]\n"
     echo -e "file\n" 
     echo -e "OPTIONS\n"
     echo -e "\t-c name\t  Create a verification file called ‘name’ also display a message 'File created'\n"
@@ -30,6 +30,13 @@ function is_flag {
 function parse_args {
     flag_count=0
     file=$(echo $1 | grep -e .txt)
+
+    if [[ $file = "" ]]; then
+        echo "RedShL: file: first argument must be a text file"
+        echo "Try bash RedShL.sh --help"
+        exit
+    fi
+
     for (( i=2; i<=$#;i++)); do
         #Check if current arg is a flag
         is_flag ${!i}
@@ -39,6 +46,7 @@ function parse_args {
             is_flag ${!j}
             if [[ $is_flag_result -eq 1 ]] || [[ ${!j} == "" ]]; then
                 echo "$0: ${!i}: option requires an argument"
+                echo "Try bash RedShL.sh --help"
                 exit
             else
                 #Removes the leading dash from the flag, e.g -c = c
