@@ -9,7 +9,7 @@ function get_help {
     echo -e "OPTIONS\n"
     echo -e "\t-c name\t  Create a verification file called ‘name’ also display a message 'File created'\n"
     echo -e "\t--help\t  Display a help message and exit\n"
-    echo -e "\t-o name\t  Display the results on the screen also save the outputs to output file ‘name\n"
+    echo -e "\t-o name\t  Display the results on the screen also save the outputs to output file ‘name'\n"
     exit
 }
 
@@ -29,6 +29,7 @@ function is_flag {
 #Checking if all required arguments are provided for each flag
 function parse_args {
     flag_count=0
+    file=$(echo $1 | grep -e .txt)
     for (( i=2; i<=$#;i++)); do
         #Check if current arg is a flag
         is_flag ${!i}
@@ -40,8 +41,9 @@ function parse_args {
                 echo "$0: ${!i}: option requires an argument"
                 exit
             else
-                FLAGS_set[$flag_count]=${!i}
-                flag_vals[$flag_count]=${!j}
+                #Removes the leading dash from the flag, e.g -c = c
+                FLAGS_set[$flag_count]=$(echo ${!i} | sed "s/-//g")
+                FLAGS_vals[$flag_count]=${!j}
                 flag_count=$((flag_count+1))
             fi
         elif [ ${!i} = "--help" ]; then

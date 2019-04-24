@@ -10,4 +10,8 @@ source lib/flags.sh
 help_arg_provided $@
 
 #get arg
+#get file for input
 parse_args $@
+
+echo "${FLAGS_set[@]}"
+echo "${FLAGS_vals[@]}"
