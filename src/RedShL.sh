@@ -30,5 +30,3 @@ mkdir tracking
 #SAve states of input file contents to verification file in ./tracking
 create_verification_file
 verify_input_file
-
-hello
