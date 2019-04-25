@@ -1,18 +1,6 @@
 #Optional FLAGS the user can provide
 FLAGS=("-o" "-c" "--help")
 
-#Help function to show how the program should be called
-#What options are available for the program and how they should be provided
-function get_help {
-    echo -e "Usage: bash RedShL.sh file [OPTIONS]\n"
-    echo -e "file\tA text file containing a list of files and directories for RedShL to monitor\n" 
-    echo -e "OPTIONS\n"
-    echo -e "\t-c name\t  Create a verification file called ‘name’ also display a message 'File created'\n"
-    echo -e "\t--help\t  Display a help message and exit\n"
-    echo -e "\t-o name\t  Display the results on the screen also save the outputs to output file ‘name'\n"
-    exit
-}
-
 #Checks if given input is a flag in the FLAGS array
 function is_flag {
     is_flag_result=0
