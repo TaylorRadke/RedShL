@@ -33,7 +33,6 @@ function print_symbols {
 
 function write_file_type {
     file=$1
-    type=$(file -bpN $file)
     
     printf "\n| File Type: " >> $verification_file
     if [ -f $1 ]; then
