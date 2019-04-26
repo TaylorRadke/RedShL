@@ -19,7 +19,6 @@ function get_help {
 #Get help if no arguments are provided
 [ $# -eq 0 ] && { get_help; }
 
-
 #Parse args from commandline, from lib/flags
 parse_args $@
 

@@ -5,6 +5,7 @@ FLAGS=("-o" "-c" "--help")
 function is_flag {
     is_flag_result=0
 
+    #Loop through FLAGS array checking if the given input matches
     for flag in ${FLAGS[@]}; do
         if [[ $1 = $flag ]]; then
             is_flag_result=1
@@ -15,10 +16,14 @@ function is_flag {
 
 #Get the input file which lists directories and files to watch
 function check_file {
-    file=$(echo $1 | grep -e .txt)
+    #Matches first argument with a string containing a .txt pattern
+    # '$' in pattern ensures that file extension ends with .txt and terminates
+    # So that .txt.* will not match
+    file=$(echo $1 | grep -e .txt$)
 
+    #If the file provided did not match the pattern then exit
     if [[ $file = "" ]]; then
-        echo "RedShL: file: first argument must be a text file"
+        echo "RedShL: file: first argument must be a .txt file"
         echo "Try 'bash RedShL.sh --help' for help"
         exit
     fi
@@ -34,11 +39,17 @@ function help_arg_provided {
 #parse_args gets the FLAGS provided by the user when starting the program
 #Checking if all required arguments are provided for each flag
 function parse_args {
+    #Check if any arguments are provided
+    [ $# -eq 0 ] && { get_help; }
+
+    #Check if --help is provided
     help_arg_provided $@
+
+    #Check if a file is given as the first argument
     check_file $@
 
     flag_count=0
-
+    #Loop through args from second arg(args after file arg)
     for (( i=2; i<=$#;i++)); do
         #Check if current arg is a flag
         is_flag ${!i}
@@ -46,12 +57,14 @@ function parse_args {
             #Check if next arg is a flag
             j=$((i+1))
             is_flag ${!j}
+
+            #Check if next arg is flag or empty string
             if [[ $is_flag_result -eq 1 ]] || [[ ${!j} == "" ]]; then
                 echo "$0: ${!i}: option requires an argument"
                 echo "Try 'bash RedShL.sh --help' for help"
                 exit
             else
-                #Removes the leading dash from the flag, e.g -c = c
+                #Removes leading dashes from the flag, e.g -c -> c
                 flag=$(echo ${!i} | sed "s/-//g")
                 if [[ $flag = "c" ]]; then
                     c_FLAG=${!j}
