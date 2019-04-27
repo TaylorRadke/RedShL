@@ -35,5 +35,7 @@ rm tracking -rf
 mkdir tracking
 
 # #Save states of input file contents to verification file in ./tracking
-create_verification_file
-#verify_input_file
+if [ $c_flag_set == true ]; then
+    create_verification_file
+fi
+verify_input_file

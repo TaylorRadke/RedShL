@@ -19,10 +19,10 @@ function check_file {
     #Matches first argument with a string containing a .txt pattern
     # '$' in pattern ensures that file extension ends with .txt and terminates
     # So that .txt.* will not match
-    file=$(echo $1 | grep -e .txt$)
-
+    file_list=$(echo $1 | grep -e .txt$)
+    
     #If the file provided did not match the pattern then exit
-    if [ $file = "" ]; then
+    if [[ $file_list = "" ]]; then
         echo "RedShL: file: first argument must be a .txt file"
         echo "Try 'bash RedShL.sh --help' for help"
         exit

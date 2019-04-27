@@ -1,6 +1,0 @@
-a.txt
-b.txt
-c.txt
-/usr/bin
-/etc/fstab
-/etc/kernel

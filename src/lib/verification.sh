@@ -1,10 +1,8 @@
 
 function create_verification_file {
-    if [ $c_FLAG != "" ]; then
-        verification_file="$(pwd)/tracking/${c_FLAG}.txt"
-        touch ${verification_file}
-        echo "Verification file Created: $(pwd)/tracking/$c_FLAG.txt"
-fi
+    verification_file="$(pwd)/tracking/${c_FLAG}.txt"
+    touch ${verification_file}
+    echo "Verification file Created: $(pwd)/tracking/$c_FLAG.txt"
 }
 
 function print_symbols {
@@ -27,16 +25,6 @@ function print_symbols {
 }
 
 function write_file_type {
-    file=$1
-    type=$(file -bpN $file)
-    
-    printf "\n| File Type: " >> $verification_file
-    if [ -f $1 ]; then
-        type="file"
-    elif [ -d $1 ]; then
-        type="directory"
-    fi
-
     printf "$type" >> $verification_file
     length=${#type}
     print_symbols $((header_length - 14 - length)) " "
@@ -45,7 +33,6 @@ function write_file_type {
 }
 
 function write_full_file_path {
-    full_path=$(readlink -f $1)
     printf "\n| Full Path: " >> $verification_file
     printf "$full_path" >> $verification_file
     
@@ -55,14 +42,19 @@ function write_full_file_path {
 }
 
 function verify_input_file {
-    while IFS= read -r line || [ -n "$line" ] ; do
-        if [ -e $line ]; then
-            write_file_headers
-            write_file_type $line
-            write_full_file_path $line
-            echo -e "\n" >> $verification_file
-        else
-            echo "Error: file or directory $line does not exist"
+    while IFS= read -r file || [ -n "$file" ] ; do 
+        if [ -e $file ]; then
+            file_type=$(stat -c "%F" $file)
+            echo $file_type
+
+            full_file_path=$(readlink -f $file)
+            echo $full_file_path
+            # if [ $c_flag_set = true ]; then
+            #     write_file_headers
+            #     write_file_type
+            #     write_full_file_path
+            #     echo -e "\n" >> $verification_file
+            # fi
         fi
-    done < $file
+    done < $file_list
 }
