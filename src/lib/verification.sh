@@ -1,14 +1,9 @@
 
 function create_verification_file {
-    if [[ $c_FLAG != "" ]]; then
+    if [ $c_FLAG != "" ]; then
         verification_file="$(pwd)/tracking/${c_FLAG}.txt"
         touch ${verification_file}
         echo "Verification file Created: $(pwd)/tracking/$c_FLAG.txt"
-    else
-        verification_file="$(pwd)/tracking/verify.txt"
-        touch ${verification_file}
-        echo -e "Dev: The below output is only for development purposes and is only being shown because a verification file was not defined with the -c option
-         \nVerification file Created: $(pwd)/tracking/verify.txt"
 fi
 }
 
