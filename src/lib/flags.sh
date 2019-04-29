@@ -25,6 +25,9 @@ function help_arg_provided {
 #Checking if all required arguments are provided for each flag
 function parse_args {
 
+    o_flag_set=false
+    c_flag_set=false
+
     flag_count=0
     #Loop through args from second arg(args after file arg)
     for (( i=1; i<=$#;i++)); do

@@ -11,19 +11,12 @@ function create_verification_file {
 }
 
 # Save the states of the files from the input file to monitor any changes
-function verify_input_file {
-    #Read all lines from input file
-    while IFS= read -r file || [ -n "$file" ] ; do
-        if [ -e $file ]; then
-            file_type=$(stat -c "%F" $file)
-            file_path_absolute=$(readlink -f $file)
-
-            if [ $c_flag_set = true ]; then
-                write_file_header
-                write_file_type
-                write_file_path_absolute
-                echo -e "\n" >> $verification_file
-            fi
-        fi
-    done < $file_list
-}
+# function verify_input_file {
+#     #Read all lines from input file
+#     while ; do
+#         if [ -e $file ]; then
+#             file_type=$(stat -c "%F" $file)
+#             file_path_absolute=$(readlink -f $file)
+#         fi
+#     done < $file_list
+# }

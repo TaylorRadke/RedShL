@@ -7,8 +7,7 @@ source lib/verification.sh
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
 function get_help {
-    echo -e "Usage: bash RedShL.sh file [OPTIONS]\n"
-    echo -e "file\tA text file containing a list of files and directories for RedShL to monitor\n"
+    echo -e "Usage: bash RedShL.sh [OPTIONS]\n"
     echo -e "OPTIONS\n"
     echo -e "\t-c name\t  Create a verification file called ‘name’ also display a message 'File created'\n"
     echo -e "\t--help\t  Display a help message and exit\n"
@@ -22,14 +21,21 @@ help_arg_provided $@
 # #Parse args from commandline, from lib/flags
 parse_args $@
 
-echo "Enter a directory to monitor for intrusions: "
+echo "=-----------------------------------------------------------="
+echo "|                            RedShL                         |"
+echo -e "=-----------------------------------------------------------=\n"
+
+
+echo "Cteate verification file: ${c_flag_set}"
+printf "Display Verification Results: ${o_flag_set}\n\n\n"
+
+echo "Enter a directory to monitor:"
 read dir_tracked
 
-echo $dir_tracked
-
-
-# #Save states of input file contents to verification file in ./tracking
-if [ $c_flag_set == true ]; then
-    create_verification_file
+#Check if dir_tracked read is a directory
+if [ -d $dir_tracked ]; then
+  echo -e "\n$dir_tracked: Saving current state of directory for verification"
+else
+  echo "Error: $dir_tracked is not a directory"
+  exit
 fi
-verify_input_file
