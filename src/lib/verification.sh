@@ -1,72 +1,85 @@
+# TODO: add functions for writing file owner, creator, permissions, last modified, when it was created
+#       Hash digest if a file, something about symlinks
+#       Create seperate file from the verification file created when -c is used to save states for checking changes 
 
+
+# Create a verification file if the -c flag is provided.
 function create_verification_file {
-    if [[ $c_FLAG != "" ]]; then
-        verification_file="$(pwd)/tracking/${c_FLAG}.txt"
-        touch ${verification_file}
-        echo "Verification file Created: $(pwd)/tracking/$c_FLAG.txt"
-    else
-        verification_file="$(pwd)/tracking/verify.txt"
-        touch ${verification_file}
-        echo -e "Dev: The below output is only for development purposes and is only being shown because a verification file was not defined with the -c option
-         \nVerification file Created: $(pwd)/tracking/verify.txt"
-fi
+    verification_file="$(pwd)/tracking/${c_FLAG}"
+    touch ${verification_file}
+    echo "Verification file Created: $(pwd)/tracking/$c_FLAG"
 }
 
+#Prints the given symbol(arg 2) the number of times given by arg 1.
 function print_symbols {
     for ((i=0; i < $1; i++)); do
         printf "$2" >> $verification_file
     done
 }
 
- function write_file_headers {
-    line_length=${#line}
+function write_file_header {
+    line_length=${#file}
     header_length=100
 
     print_symbols $header_length "="
-    printf "\n| $line" >> $verification_file
+    header=""
 
-    print_symbols $((header_length-3-line_length)) " "
+    print_symbols $((header_length)) " "
     printf "|\n" >> $verification_file
 
     print_symbols $header_length "="
+    printf "\n" >> $verification_file
 }
 
+
+# Write a row to the table which shows the file type of the current line, either file or directory
 function write_file_type {
-    file=$1
-    
-    printf "\n| File Type: " >> $verification_file
-    if [ -f $1 ]; then
-        type="file"
-    elif [ -d $1 ]; then
-        type="directory"
-    fi
+    row="| File Type: $file_type"
 
-    printf "$type" >> $verification_file
-    length=${#type}
-    print_symbols $((header_length - 14 - length)) " "
+    #Length of row needed to know how many spaces to print
+    row_length=$((${#row}+1))
+    
+    printf "${row}" >> $verification_file
+
+    print_symbols $((header_length - row_length)) " "
+
     printf "|\n" >> $verification_file
+
     print_symbols $header_length "-"
+    printf "\n" >> $verification_file
 }
 
-function write_full_file_path {
-    full_path=$(readlink -f $1)
-    printf "\n| Full Path: " >> $verification_file
-    printf "$full_path" >> $verification_file
+# Prints the full file path of input line of the given line is a link to a relative file.
+function write_file_path_absolute {
+    row="| Absolute Path: $file_path_absolute"
+    row_length=$((${#row}+1))
+
+    printf "${row}" >> $verification_file
+
+    print_symbols $((header_length - row_length)) " "
     
-    print_symbols $((header_length -14 - ${#full_path})) " "
     printf "|\n" >> $verification_file
+
     print_symbols $header_length "-"
+    printf "\n" >> $verification_file
+
 }
 
+# Save the states of the files from the input file to monitor any changes
 function verify_input_file {
-    while IFS= read -r line || [ -n "$line" ] ; do
-        if [ -e $line ]; then
-            write_file_headers
-            write_file_type $line
-            write_full_file_path $line
-            echo -e "\n" >> $verification_file
-        else
-            echo "Error: file or directory $line does not exist"
+    #Read all lines from input file
+    while IFS= read -r file || [ -n "$file" ] ; do 
+        if [ -e $file ]; then
+            file_type=$(stat -c "%F" $file)
+            file_path_absolute=$(readlink -f $file)
+
+            echo $file_path_absolute
+            if [ $c_flag_set = true ]; then
+                write_file_header
+                write_file_type
+                write_file_path_absolute
+                echo -e "\n" >> $verification_file
+            fi
         fi
-    done < $file
+    done < $file_list
 }

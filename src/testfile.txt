@@ -1,6 +1,4 @@
 a.txt
-b.txt
-c.txt
-/usr/bin
+/usr/a
 /etc/fstab
 /etc/kernel

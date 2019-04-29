@@ -17,15 +17,25 @@ function get_help {
 }
 
 #Get help if no arguments are provided
-[ $# -eq 0 ] && { get_help; }
+if [ $# -eq 0 ]; then
+    get_help
+fi
 
-#Parse args from commandline, from lib/flags
+#Check if --help is provided
+help_arg_provided $@
+
+#Check if a file is given as the first argument
+check_file $1
+
+# #Parse args from commandline, from lib/flags
 parse_args $@
 
-#Recreate tracking directory if it exists
+# #Recreate tracking directory if it exists
 rm tracking -rf
 mkdir tracking
 
-#SAve states of input file contents to verification file in ./tracking
-create_verification_file
+# #Save states of input file contents to verification file in ./tracking
+if [ $c_flag_set == true ]; then
+    create_verification_file
+fi
 verify_input_file
