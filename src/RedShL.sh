@@ -2,7 +2,7 @@
 
 #Import functions from lib/
 source lib/flags.sh
-source lib/record_state.sh
+source lib/state_mapping.sh
 
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
@@ -40,15 +40,14 @@ printf "\033[1A\033[2K"
 
 #Check if dir_tracked read is a directory
 if [ -d $dir_tracked ]; then
-  printf "$dir_tracked: Mapping current state of directory for verification\n"
+  printf "$dir_tracked: Map current state of directory...in progress"
 else
   printf "Error: $dir_tracked is not a directory\n"
   exit
 fi
 
 #Save the current state of the given directory for verification
+create_verification_state
 
-declare -A initial_state_map
-
-create_verification_state $initial_state_map
-printf "Finished mapping current directory state\n"
+initial_state_map=${file_map[@]}
+printf "\r$dir_tracked: Map current state of directory...complete   \n"
