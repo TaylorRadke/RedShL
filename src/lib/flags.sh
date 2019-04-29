@@ -40,8 +40,8 @@ function parse_args {
 
             #Check if next arg is flag or empty string
             if [[ $is_flag_result -eq 1 ]] || [[ ${!j} == "" ]]; then
-                echo "$0: ${!i}: option requires an argument"
-                echo "Try 'bash RedShL.sh --help' for help"
+                printf "$0: ${!i}: option requires an argument\n"
+                printf "Try 'bash RedShL.sh --help' for help\n"
                 exit
             else
                 #Removes leading dashes from the flag, e.g -c -> c
