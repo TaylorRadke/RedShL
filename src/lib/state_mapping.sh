@@ -19,20 +19,30 @@ function map_initial_directory_state {
       printf "%s\n" "${initial_state_map[$key]}" >> $verification_file
     fi
   done
+
+  for key in ${!initial_state_map[@]}; do
+    verification_inodes=("${verification_inodes[@]}" $key)
+  done
 }
 
 #Get the current state of the dir_tracked directory by storing attributes
 #of its contents
 function create_verification_state {
   tracking_files=$(find $dir_tracked)
+  file_name_max_length=0
 
   for file in $tracking_files; do
     #Get all file attributes
 
     file_inode=$(stat --format="%i" $file)
-    dir_inodes=(${dir_inodes[@]} $file_inode)
 
     file_name=$(stat --format="%n" $file)
+    file_basename=$(basename $file_name)
+
+    if [[ ${#file_basename} -gt $file_name_max_length ]]; then
+      file_name_max_length=${#file_basename}
+    fi
+
     file_path_absolute=$(readlink -f $file)
     file_type=$(stat --format="%F" $file)
     file_owner_id=$(stat --format="%u" $file)

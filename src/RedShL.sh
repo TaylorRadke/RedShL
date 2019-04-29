@@ -42,7 +42,8 @@ printf "\033[1A\033[2K"
 
 #Check if dir_tracked read is a directory
 if [ -d $dir_tracked ]; then
-  printf "$dir_tracked: Map current state of directory...in progress"
+  printf "Track $dir_tracked:\n"
+  printf "Map current state of directory...in progress"
 else
   printf "Error: $dir_tracked is not a directory\n"
   exit
@@ -55,15 +56,17 @@ fi
 #the files inode and copy it into initial_state_map
 map_initial_directory_state
 
-printf "\r$dir_tracked: Map current state of directory...complete   \n"
+printf "\rMap current state of directory...complete   \n"
 
-printf "Tracking ${#dir_inodes[@]} files\n\n"
+printf "Tracking ${#verification_inodes[@]} files\n\n"
 
-read -p "Begin verification[y/n]: " begin_verify
-
-while [ ! $begin_verify = 'y' ]; do
+#Ask the user if they would like to begin verifyication
+while read -p "Begin verification [y/n]: " begin_verify; do
+  if [ $begin_verify = 'y' ]; then
+    break
+  else
     printf "\033[1A\033[2K"
-    read -p "Begin verification[y/n]: " begin_verify
+  fi
 done
 
 verify_tracked_directory
