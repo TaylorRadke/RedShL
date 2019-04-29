@@ -1,13 +1,13 @@
 function verify_tracked_directory {
   printf "\033[1A\033[2K"
-  printf "\rBeginning verification\n"
+  printf "\rBeginning verification:\n\n"
   printf "Mapping current state of directory...in progress"
   #Map the current state of the tracked directory
   create_verification_state
   printf "\rMapping current state of directory...complete    \n"
   printf "Verifiying initial state with current state\n\n"
   compare_verification_states
-  printf "Verification complete with %d failing\n" "${fail_count}"
+  printf "Verification finished with %d failing\n" "${fail_count}"
 }
 
 function compare_verification_states {
