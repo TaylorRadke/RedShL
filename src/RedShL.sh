@@ -42,21 +42,17 @@ printf "\033[1A\033[2K"
 
 #Check if dir_tracked read is a directory
 if [ -d $dir_tracked ]; then
-  printf "Track $dir_tracked:\n"
-  printf "Map current state of directory...in progress"
+  printf "$dir_tracked:\n\n"
+  printf "Mapping current state of directory...in progress"
 else
   printf "Error: $dir_tracked is not a directory\n"
   exit
 fi
-# for node in "${dir_inodes[@]}"; do
-#   echo ${initial_state_map[$node]}
-# done
-
 #Get the initial state of the directory dir_tracked and map its files attributes by
 #the files inode and copy it into initial_state_map
 map_initial_directory_state
 
-printf "\rMap current state of directory...complete   \n"
+printf "\rMapping current state of directory...complete   \n"
 
 printf "Tracking ${#verification_inodes[@]} files\n\n"
 
