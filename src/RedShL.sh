@@ -21,16 +21,19 @@ help_arg_provided $@
 # #Parse args from commandline, from lib/flags
 parse_args $@
 
+#Program header to print
 printf "=-----------------------------------------------------------=\n"
-printf "|                            RedShL                         |\n"
+printf "|                             RedShL                        |\n"
 printf "=-----------------------------------------------------------=\n\n"
 
+printf "Need help? Try 'bash RedShL.sh --help'\n\n"
 
 printf "Create verification file: ${c_flag_set}\n"
 printf "Display verification results: ${o_flag_set}\n\n"
 
 #Prompt the user to enter direcotry name then store it in dir_tracked
-read -p "Enter a directory to monitor: " dir_tracked
+#-e allows for autocompletion of files names and directories using tab
+read -e -p "Enter a directory to monitor: " dir_tracked
 
 #delete previous line
 printf "\033[1A\033[2K"
@@ -42,3 +45,5 @@ else
   printf "Error: $dir_tracked is not a directory\n"
   exit
 fi
+
+create_verification_state

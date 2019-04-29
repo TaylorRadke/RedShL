@@ -10,13 +10,18 @@ function create_verification_file {
     echo "Verification file Created: $(pwd)/tracking/$c_FLAG"
 }
 
-# Save the states of the files from the input file to monitor any changes
-# function verify_input_file {
-#     #Read all lines from input file
-#     while ; do
-#         if [ -e $file ]; then
-#             file_type=$(stat -c "%F" $file)
-#             file_path_absolute=$(readlink -f $file)
-#         fi
-#     done < $file_list
-# }
+
+#Get the current state of the dir_tracked directory by storing attributes
+#of its contents
+
+function create_verification_state {
+  #Gets all files, directorys and symbolic links in the given directory
+  #and using grep to remove labels for folders from using ls -R
+  tracking_files=$(find $dir_tracked)
+
+  for file in $tracking_files; do
+    file_path_absolute=$(readlink -f $file)
+    file_type=$(stat -c "%F" $file)
+
+  done
+}
