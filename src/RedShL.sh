@@ -33,6 +33,8 @@ if [ $c_flag_set = true ]; then
   create_verification_file
 fi
 
+echo $o_flag_set
+echo $c_flag_set
 #Prompt the user to enter direcotry name then store it in dir_tracked
 #-e allows for autocompletion of files names and directories using tab
 read -e -p "Enter a directory to monitor: " dir_tracked
@@ -52,8 +54,10 @@ fi
 #the files inode and copy it into initial_state_map
 map_initial_directory_state
 
+#Replaced in progress line with complete
 printf "\rMapping current state of directory...complete   \n"
 
+#Print how many files are being tracked
 printf "Tracking ${#verification_inodes[@]} files\n\n"
 
 #Ask the user if they would like to begin verifyication

@@ -4,7 +4,7 @@ FLAGS=("-o" "-c")
 #Checks if given input is a flag in the FLAGS array
 function is_flag {
     is_flag_result=0
-
+    input=$1
     #Check if the input matches any of the defined FLAGS
     for flag in ${FLAGS[@]}; do
         if [[ $1 = $flag ]]; then
@@ -12,6 +12,13 @@ function is_flag {
             return
         fi
     done
+
+    #Check if string starts with '-' in which case it is not an option defined
+    if [ "${input:0:1}" = "-" ]; then
+      printf "$0: $1: unrecognised option\n"
+      printf "Try 'bash RedShL.sh --help' for help\n"
+      exit
+    fi
 }
 
 #Check if the user provided the --help flag
@@ -51,6 +58,7 @@ function parse_args {
                 elif [ $flag = "-o" ]; then
                     output_file=${!j}
                     o_flag_set=true
+                    echo "o flag"
                 fi
             fi
         fi
