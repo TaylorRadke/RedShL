@@ -14,21 +14,6 @@ function is_flag {
     done
 }
 
-#Get the input file which lists directories and files to watch
-function check_file {
-    #Matches first argument with a string containing a .txt pattern
-    # '$' in pattern ensures that file extension ends with .txt and terminates
-    # So that .txt.* will not match
-    file_list=$(echo $1 | grep -e .txt$)
-    
-    #If the file provided did not match the pattern then exit
-    if [[ $file_list = "" ]]; then
-        echo "RedShL: file: first argument must be a .txt file"
-        echo "Try 'bash RedShL.sh --help' for help"
-        exit
-    fi
-}
-
 #Check if the user provided the --help flag
 function help_arg_provided {
     for i in "$@"; do
@@ -42,7 +27,7 @@ function parse_args {
 
     flag_count=0
     #Loop through args from second arg(args after file arg)
-    for (( i=2; i<=$#;i++)); do
+    for (( i=1; i<=$#;i++)); do
         #Check if current arg is a flag
         is_flag ${!i}
         if [ $is_flag_result -eq 1 ]; then

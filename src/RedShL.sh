@@ -8,7 +8,7 @@ source lib/verification.sh
 #What options are available for the program and how they should be provided
 function get_help {
     echo -e "Usage: bash RedShL.sh file [OPTIONS]\n"
-    echo -e "file\tA text file containing a list of files and directories for RedShL to monitor\n" 
+    echo -e "file\tA text file containing a list of files and directories for RedShL to monitor\n"
     echo -e "OPTIONS\n"
     echo -e "\t-c name\t  Create a verification file called ‘name’ also display a message 'File created'\n"
     echo -e "\t--help\t  Display a help message and exit\n"
@@ -16,23 +16,17 @@ function get_help {
     exit
 }
 
-#Get help if no arguments are provided
-if [ $# -eq 0 ]; then
-    get_help
-fi
-
 #Check if --help is provided
 help_arg_provided $@
-
-#Check if a file is given as the first argument
-check_file $1
 
 # #Parse args from commandline, from lib/flags
 parse_args $@
 
-# #Recreate tracking directory if it exists
-rm tracking -rf
-mkdir tracking
+echo "Enter a directory to monitor for intrusions: "
+read dir_tracked
+
+echo $dir_tracked
+
 
 # #Save states of input file contents to verification file in ./tracking
 if [ $c_flag_set == true ]; then

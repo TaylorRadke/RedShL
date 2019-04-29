@@ -1,4 +1,0 @@
-a.txt
-/usr/a
-/etc/fstab
-/etc/kernel
