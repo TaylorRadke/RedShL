@@ -10,13 +10,9 @@ function create_verification_file {
 #Get the current state of the dir_tracked directory by storing attributes
 #of its contents
 function create_verification_state {
-  #Gets all files, directorys and symbolic links in the given directory
-  #and using grep to remove labels for folders from using ls -R
-  rm verification_file
-  touch verification_file
-
-  tracking_files=$(find $dir_tracked)
-  printf "Tracking %d files\n" "${#tracking_files}"
+  tracking_files=($(find $dir_tracked))
+  echo ${#tracking_files[@]}
+  #printf "Tracking %d files\n" "${#tracking_files}"
 
   for file in $tracking_files; do
     #Recreate file_attrs array
@@ -33,7 +29,7 @@ function create_verification_state {
     file_time_last_modified=$(stat --format="%y" $file)
     file_time_last_accessed=$(stat --format="%x" $file)
 
-    #Add all attrs to array
+    #Add all attrs to array for both files and directories
     file_attrs=(
       $file_inode
       $file_name
@@ -52,11 +48,10 @@ function create_verification_state {
       file_digest_md5=$(openssl dgst -md5 $file | sed 's/^.* //')
 
       #Get file word count
-      
-    fi
+      file_word_count=$(wc --chars $file)
 
-    #Print file_attrs to verification file
-    printf "%s," "${file_attrs[@]}" >> verification_file
-    printf "\n" >> verification_file
+      #Add digest and word count to file_attrs array
+      file_attrs=("${file_attrs[@]}" $file_digest_md5 $file_digest_sha1 $file_word_count)
+    fi
   done
 }
