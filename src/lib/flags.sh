@@ -40,6 +40,7 @@ function parse_args {
     for (( i=1; i<=$#;i++)); do
         #Check if current arg is a flag
         is_flag ${!i}
+
         if [ $is_flag_result -eq 1 ]; then
             #Check if next arg is a flag
             j=$((i+1))
@@ -51,10 +52,13 @@ function parse_args {
                 printf "Try 'bash RedShL.sh --help' for help\n"
                 exit
             else
+                flag=${!i}
+
                 #Turn flag on and give its value if set
                 if [ $flag = "-c" ]; then
                     verification_file=${!j}
                     c_flag_set=true
+                    echo "c flag"
                 elif [ $flag = "-o" ]; then
                     output_file=${!j}
                     o_flag_set=true

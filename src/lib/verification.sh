@@ -5,7 +5,7 @@ function verify_tracked_directory {
   #Map the current state of the tracked directory
   create_verification_state
   printf "\rMapping current state of directory...complete    \n"
-  printf "Verifiying initial state with current state\n"
+  printf "Verifiying initial state with current state\n\n"
   compare_verification_states
   printf "Verification complete with %d failing\n" "${fail_count}"
 }
@@ -36,10 +36,14 @@ function compare_verification_states {
     if [ $o_flag_set = true ]; then
       printf "%$((file_name_max_length+1))s\t " "${file_name}"
       if [ $current_failed = false ]; then
-        printf "\u2714"
+        printf "\u2714 Passed\n"
       else
-        printf "\u274c Failed"
+        printf "\u274c Failed\n"
       fi
     fi
   done;
+
+  if [ $o_flag_set = true ]; then
+    printf "\n"
+  fi
 }

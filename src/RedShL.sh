@@ -33,8 +33,6 @@ if [ $c_flag_set = true ]; then
   create_verification_file
 fi
 
-echo $o_flag_set
-echo $c_flag_set
 #Prompt the user to enter direcotry name then store it in dir_tracked
 #-e allows for autocompletion of files names and directories using tab
 read -e -p "Enter a directory to monitor: " dir_tracked
