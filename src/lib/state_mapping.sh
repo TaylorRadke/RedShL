@@ -10,13 +10,12 @@ function create_verification_file {
 #Get the current state of the dir_tracked directory by storing attributes
 #of its contents
 function create_verification_state {
-  tracking_files=($(find $dir_tracked))
-  echo ${#tracking_files[@]}
-  #printf "Tracking %d files\n" "${#tracking_files}"
+  tracking_files=$(find $dir_tracked)
+
+  input_map=$1
 
   for file in $tracking_files; do
     #Recreate file_attrs array
-    file_attrs=()
 
     #Get all file attributes
     file_inode=$(stat --format="%i" $file)
@@ -29,17 +28,16 @@ function create_verification_state {
     file_time_last_modified=$(stat --format="%y" $file)
     file_time_last_accessed=$(stat --format="%x" $file)
 
-    #Add all attrs to array for both files and directories
-    file_attrs=(
-      $file_inode
-      $file_name
-      $file_path_absolute
-      $file_owner_id
-      $file_group_id
-      $file_access_priviledges
-      $file_time_last_accessed
-      $file_time_last_modified
-      )
+    #Add all attrs to string
+    map_string="
+      $file_inode,
+      $file_name,
+      $file_path_absolute,
+      $file_owner_id,
+      $file_group_id,
+      $file_access_priviledges,
+      $file_time_last_accessed,
+      $file_time_last_modified"
 
     #Check if file is a regular file
     if [ -f $file ]; then
@@ -48,10 +46,12 @@ function create_verification_state {
       file_digest_md5=$(openssl dgst -md5 $file | sed 's/^.* //')
 
       #Get file word count
-      file_word_count=$(wc --chars $file)
+      file_word_count=$(wc --words $file)
 
+      echo $file_word_count
       #Add digest and word count to file_attrs array
-      file_attrs=("${file_attrs[@]}" $file_digest_md5 $file_digest_sha1 $file_word_count)
+      map_string="${map_string},$file_digest_md5,$file_digest_sha1,$file_word_count"
     fi
+    #echo $map_string >> verification_file
   done
 }
