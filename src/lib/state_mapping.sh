@@ -1,10 +1,13 @@
 #Verification Source for file verification
-
-# Create a verification file if the -c flag is provided.
 function create_verification_file {
+    #remove any verification file with same name if they exist
+    if [ -e ${verification_file} ]; then
+      rm ${verification_file}
+    fi
     touch ${verification_file}
-    echo "Verification file Created: ${verification_file}"
+    printf "Verification file Created: %s\n\n" "${verification_file}"
 }
+
 
 function map_initial_directory_state {
   #Save the current state of the given directory for verification
@@ -12,6 +15,9 @@ function map_initial_directory_state {
   #copy file_map to initial_state_map
   for key in "${!file_map[@]}"; do
     initial_state_map[$key]="${file_map[$key]}"
+    if [ $c_flag_set = true ]; then
+      printf "%s\n" "${initial_state_map[$key]}" >> $verification_file
+    fi
   done
 }
 
