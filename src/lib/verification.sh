@@ -10,10 +10,8 @@ function create_verification_file {
     echo "Verification file Created: $(pwd)/tracking/$c_FLAG"
 }
 
-
 #Get the current state of the dir_tracked directory by storing attributes
 #of its contents
-
 function create_verification_state {
   #Gets all files, directorys and symbolic links in the given directory
   #and using grep to remove labels for folders from using ls -R
@@ -21,8 +19,13 @@ function create_verification_state {
   touch verification_file
 
   tracking_files=$(find $dir_tracked)
+  printf "Tracking %d files\n" "${#tracking_files}"
 
   for file in $tracking_files; do
+    #Recreate file_attrs array
+    file_attrs=()
+
+    #Get all file attributes
     file_inode=$(stat --format="%i" $file)
     file_name=$(stat --format="%n" $file)
     file_path_absolute=$(readlink -f $file)
@@ -33,15 +36,20 @@ function create_verification_state {
     file_time_last_modified=$(stat --format="%y" $file)
     file_time_last_accessed=$(stat --format="%x" $file)
 
-    printf "$file_inode," >> verification_file
-    printf "$file_path_absolute," >> verification_file
-    printf "$file_name," >> verification_file
-    printf "$file_type," >> verification_file
-    printf "$file_owner_id," >> verification_file
-    printf "$file_group_id," >> verification_file
-    echo -n "$file_access_priviledges," >> verification_file
-    printf "$file_time_last_modified," >> verification_file
-    printf "$file_time_last_accessed" >> verification_file
+    #Add all attrs to array
+    file_attrs=(
+      $file_inode
+      $file_name
+      $file_path_absolute
+      $file_owner_id
+      $file_group_id
+      $file_access_priviledges
+      $file_time_last_accessed
+      $file_time_last_modified
+      )
+
+    #Print file_attrs to verification file
+    printf "%s," "${file_attrs[@]}" >> verification_file
     printf "\n" >> verification_file
   done
 }

@@ -22,9 +22,9 @@ help_arg_provided $@
 parse_args $@
 
 #Program header to print
-printf "=-----------------------------------------------------------=\n"
-printf "|                             RedShL                        |\n"
-printf "=-----------------------------------------------------------=\n\n"
+printf "=-------------------------------------------------------------=\n"
+printf "|                             RedShL                          |\n"
+printf "=-------------------------------------------------------------=\n\n"
 
 printf "Need help? Try 'bash RedShL.sh --help'\n\n"
 
@@ -40,11 +40,12 @@ printf "\033[1A\033[2K"
 
 #Check if dir_tracked read is a directory
 if [ -d $dir_tracked ]; then
-  printf "$dir_tracked: Saving current state of directory for verification, this may take a moment\n"
+  printf "$dir_tracked: Saving current state of directory for verification\n"
 else
   printf "Error: $dir_tracked is not a directory\n"
   exit
 fi
 
+#Save the current state of the given directory for verification
 create_verification_state
 printf "Finished saving state\n"
