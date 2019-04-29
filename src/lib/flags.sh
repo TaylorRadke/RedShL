@@ -5,7 +5,7 @@ FLAGS=("-o" "-c")
 function is_flag {
     is_flag_result=0
 
-    #Loop through FLAGS array checking if the given input matches
+    #Check if the input matches any of the defined FLAGS
     for flag in ${FLAGS[@]}; do
         if [[ $1 = $flag ]]; then
             is_flag_result=1
@@ -44,12 +44,11 @@ function parse_args {
                 printf "Try 'bash RedShL.sh --help' for help\n"
                 exit
             else
-                #Removes leading dashes from the flag, e.g -c -> c
-                flag=$(echo ${!i} | sed "s/-//g")
-                if [ $flag = "c" ]; then
+                #Turn flag on and give its value if set
+                if [ $flag = "-c" ]; then
                     c_FLAG=${!j}
                     c_flag_set=true
-                elif [ $flag = "o" ]; then
+                elif [ $flag = "-o" ]; then
                     o_FLAG=${!j}
                     o_flag_set=true
                 fi
