@@ -46,8 +46,8 @@ else
   exit
 fi
 
-#Save the current state of the given directory for verification
-create_verification_state
+#Get the initial state of the directory dir_tracked and map its files attributes by
+#the files inode and copy it into initial_state_map
+map_initial_directory_state
 
-initial_state_map=${file_map[@]}
 printf "\r$dir_tracked: Map current state of directory...complete   \n"

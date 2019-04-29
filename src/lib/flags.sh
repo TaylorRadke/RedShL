@@ -46,10 +46,10 @@ function parse_args {
             else
                 #Turn flag on and give its value if set
                 if [ $flag = "-c" ]; then
-                    c_FLAG=${!j}
+                    verification_file=${!j}
                     c_flag_set=true
                 elif [ $flag = "-o" ]; then
-                    o_FLAG=${!j}
+                    output_file=${!j}
                     o_flag_set=true
                 fi
             fi

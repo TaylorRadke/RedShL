@@ -2,19 +2,27 @@
 
 # Create a verification file if the -c flag is provided.
 function create_verification_file {
-    verification_file="$(pwd)/tracking/${c_FLAG}"
     touch ${verification_file}
-    echo "Verification file Created: $(pwd)/tracking/$c_FLAG"
+    echo "Verification file Created: ${verification_file}"
+}
+
+function map_initial_directory_state {
+  #Save the current state of the given directory for verification
+  create_verification_state
+  #copy file_map to initial_state_map
+  for key in "${!file_map[@]}"; do
+    initial_state_map[$key]="${file_map[$key]}"
+  done
 }
 
 #Get the current state of the dir_tracked directory by storing attributes
 #of its contents
 function create_verification_state {
   tracking_files=$(find $dir_tracked)
-  dir_inodes=()
 
   for file in $tracking_files; do
     #Get all file attributes
+
     file_inode=$(stat --format="%i" $file)
     dir_inodes=(${dir_inodes[@]} $file_inode)
 
