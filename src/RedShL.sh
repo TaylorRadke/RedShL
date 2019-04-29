@@ -40,10 +40,11 @@ printf "\033[1A\033[2K"
 
 #Check if dir_tracked read is a directory
 if [ -d $dir_tracked ]; then
-  printf "$dir_tracked: Saving current state of directory for verification\n"
+  printf "$dir_tracked: Saving current state of directory for verification, this may take a moment\n"
 else
   printf "Error: $dir_tracked is not a directory\n"
   exit
 fi
 
 create_verification_state
+printf "Finished saving state\n"
