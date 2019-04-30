@@ -1,5 +1,5 @@
 #Optional FLAGS the user can provide
-FLAGS=("-o" "-c")
+FLAGS=("-o" "-c" "-t")
 
 #Checks if given input is a flag in the FLAGS array
 function is_flag {
@@ -63,6 +63,9 @@ function parse_args {
                     output_file=${!j}
                     o_flag_set=true
                     echo "o flag"
+                elif [ $flag = "-t" ]; then
+                    t_flag_set=true
+                    dir_tracked="${!j}"
                 fi
             fi
         fi

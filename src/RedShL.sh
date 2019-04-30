@@ -10,9 +10,10 @@ source lib/verification.sh
 function get_help {
     printf "Usage: bash RedShL.sh [OPTIONS]\n\n"
     printf "OPTIONS\n\n"
-    printf "\t-c name\t  Create a verification file called ‘name’ also display a message 'File created'\n\n"
-    printf "\t--help\t  Display a help message and exit\n\n"
-    printf "\t-o name\t  Display the results on the screen also save the outputs to output file ‘name'\n\n"
+    printf "  -c name\t Create a verification file called ‘name’ also display a message 'File created'\n\n"
+    printf "  --help\t Display a help message and exit\n\n"
+    printf "  -o name\t Display the results on the screen also save the outputs to output file ‘name'\n\n"
+    printf "  -t directory\t Choose the directory to track, skipping user input\n\n"
     exit
 }
 
@@ -35,7 +36,9 @@ fi
 
 #Prompt the user to enter direcotry name then store it in dir_tracked
 #-e allows for autocompletion of files names and directories using tab
-read -e -p "Enter a directory to monitor: " dir_tracked
+if [ ! $t_flag_set = true ]; then
+  read -e -p "Enter a directory to monitor: " dir_tracked
+fi
 
 #delete previous line
 printf "\033[1A\033[2K"
