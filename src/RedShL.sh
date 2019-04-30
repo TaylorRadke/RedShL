@@ -8,10 +8,10 @@ source lib/verification.sh
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
 function get_help {
-    printf "Usage: bash RedShL.sh [OPTIONS]\n\n"
-    printf "OPTIONS\n\n"
+    printf "Usage: bash RedShL.sh [options]\n\n"
+    printf "options:\n\n"
     printf "  -c name\t Create a verification file called ‘name’ also display a message 'File created'\n\n"
-    printf "  --help\t Display a help message and exit\n\n"
+    printf "  -h, --help\t Display a help message and exit\n\n"
     printf "  -o name\t Display the results on the screen also save the outputs to output file ‘name'\n\n"
     printf "  -t directory\t Choose the directory to track, skipping user input\n\n"
     exit

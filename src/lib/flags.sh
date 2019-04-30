@@ -23,8 +23,10 @@ function is_flag {
 
 #Check if the user provided the --help flag
 function help_arg_provided {
-    for i in "$@"; do
-        [ $i = "--help" ] && { get_help; }
+    for arg in "$@"; do
+      if [ $arg = '-h' ] || [ $arg = "--help" ]; then
+        get_help
+      fi
     done
 }
 
