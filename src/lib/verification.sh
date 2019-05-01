@@ -1,3 +1,6 @@
+
+
+
 function verify_tracked_directory {
   printf "\033[1A\033[2K"
   printf "\rBeginning verification:\n\n"

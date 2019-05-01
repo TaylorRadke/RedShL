@@ -1,5 +1,7 @@
+
+
 #Optional FLAGS the user can provide
-FLAGS=("-o" "-c" "-t")
+FLAGS={"-o" "-c" "-t"}
 
 #Checks if given input is a flag in the FLAGS array
 function is_flag {

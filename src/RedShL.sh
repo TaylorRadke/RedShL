@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/bin/sh
+
 
 #Import functions from lib/
-source lib/flags.sh
-source lib/state_mapping.sh
-source lib/verification.sh
+. ./lib/flags.sh
+. ./lib/state_mapping.sh
+. ./lib/verification.sh
 
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
