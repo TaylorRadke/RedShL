@@ -3,17 +3,33 @@ verify_tracked_directory() {
   printf "\rBeginning verification:\n\n"
   printf "Mapping current state of directory...in progress"
   #Map the current state of the tracked directory
-  current_tracked_state="currenttrackedstate"
 
-  create_verification_state $current_tracked_state
+  if [ $v_flag_set = "false" ]
+  then
+    current_tracked_state="default_state_tracking"
+    create_verification_state $current_tracked_state
+  fi
+
   set_base_file
   get_file_name_padding
 
   printf "\rMapping current state of directory...complete    \n"
   printf "Verifiying initial state with current state\n"
+  
   compare_verification_states
-  rm $current_tracked_state
+
+  if [ $c_flag_set = "false" ]
+  then
+    rm $verification_file
+  fi
+
+  if [ $v_flag_set = "false" ]
+  then
+    rm $current_tracked_state
+  fi
+
   printf "Verification finished with %d failing\n" "$file_verification_fail_count"
+
 }
 
 #Get the file name from the comma seperated list

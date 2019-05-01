@@ -10,10 +10,11 @@
 get_help() {
     printf "Usage: sh RedShL.sh [options]\n\n"
     printf "options:\n\n"
-    printf "  -c name\t Create a verification file called ‘name’ also display a message 'File created'\n\n"
-    printf "  -h, --help\t Display a help message and exit\n\n"
-    printf "  -o name\t Display the results on the screen also save the outputs to output file ‘name'\n\n"
-    printf "  -t directory\t Choose the directory to track, skipping user input\n\n"
+    printf "  -c name\t Create a verification file called ‘name’ also display a message 'File created'\n"
+    printf "  -h, --help\t Display a help message and exit\n"
+    printf "  -o name\t Display the results on the screen also save the outputs to output file ‘name'\n"
+    printf "  -t directory\t Choose the directory to track, skipping user input\n"
+    printf "  -v file\t Select a verification file to use to check against the current state\n"
     exit
 }
 
@@ -27,15 +28,14 @@ parse_args "$@"
 printf "=-------------------------------------------------------------=\n"
 printf "|                             RedShL                          |\n"
 printf "=-------------------------------------------------------------=\n"
-
-printf "Need help? Try 'bash RedShL.sh --help'\n\n\n"
+printf "Need Help? Try 'sh RedShL.sh --help'\n\n"
 
 if [ $c_flag_set = "true" ]; then
   create_verification_file
 fi
 
 #Prompt the user to enter direcotry name then store it in dir_tracked
-if [ $t_flag_set = false ]; then
+if [ $t_flag_set = "false" ]; then
   read -p "Enter a directory to monitor: " dir_tracked
 fi
 

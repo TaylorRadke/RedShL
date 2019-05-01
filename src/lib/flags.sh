@@ -22,11 +22,11 @@ check_flag_missing_arg(){
 #Checking if all required arguments are provided for each flag
 parse_args() {
 
-    o_flag_set=false
-    c_flag_set=false
-    t_flag_set=false
+    o_flag_set="false"
+    c_flag_set="false"
+    t_flag_set="false"
+    v_flag_set="false"
 
-    output_file="results"
     verification_file="verification"
 
     for arg
@@ -34,20 +34,32 @@ parse_args() {
       case $arg in
         -o)
           check_flag_missing_arg "$@"
-          o_flag_set=true
+          o_flag_set="true"
           output_file="$2"
           shift; shift
           ;;
         -c)
           check_flag_missing_arg "$@"
-          c_flag_set=true
+          c_flag_set="true"
           verification_file="$2"
           shift; shift
           ;;
         -t)
           check_flag_missing_arg "$@"
-          t_flag_set=true
+          t_flag_set="true"
           dir_tracked="$2"
+          shift; shift
+          ;;
+        -v)
+          check_flag_missing_arg "$@"
+          v_flag_set="true"
+          current_tracked_state="$2"
+
+          if [ ! -f "$current_tracked_state" ]
+          then
+            printf "Error: $current_tracked_state: cannot find verification file\n"
+            exit
+          fi
           shift; shift
           ;;
         -*)
