@@ -30,7 +30,6 @@ get_file_name(){
   done
 }
 
-
 set_base_file(){
   initiaL_verification_file_lines=$(wc -l "$verification_file" | grep -o "\w* ")
   current_verification_file_lines=$(wc -l "$current_tracked_state" | grep -o "\w* ")
@@ -47,7 +46,7 @@ set_base_file(){
 }
 
 get_file_name_padding(){
-  longest_file_name=0
+  f_name_padding=0
   while IFS= read -r base_state
   do
     IFS=","
@@ -57,9 +56,9 @@ get_file_name_padding(){
       if [ $i -eq 3 ]
       then
         file_name=$(basename $field)
-        if [ ${#file_name} -gt $longest_file_name ]
+        if [ ${#file_name} -gt $f_name_padding ]
         then
-          longest_file_name="${#file_name}"
+          f_name_padding="${#file_name}"
         fi
       fi
       i=$((i+1))
@@ -86,27 +85,28 @@ compare_verification_states() {
         then
           inode_match="true"
           #Check if the two matching lines are equal
-          if [ "$initial_state" = "$current_state" ]
+          if [ "$base_state" = "$checking_state" ]
           then
             state_verification="passed"
+
           else
             state_verification="failed"
           fi
         fi
       done <$checking_file
 
-      if [ $inode_match = "false" ] || [ "$state_verification_passed" = "failed" ]
+      if [ $inode_match = "false" ] || [ "$state_verification" = "failed" ]
       then
         file_verification_fail_count=$((file_verification_fail_count+1))
       fi
 
       if [ $o_flag_set = "true" ]
       then
-        if [ $inode_match = "false" ] || [ "$state_verification_passed" = "failed" ]
+        if [ $inode_match = "false" ] || [ "$state_verification" = "failed" ]
         then
-          printf "%${longest_file_name}s FAILED\n" "${file_name}"
+          printf "%${f_name_padding}s\tFAILED\n" "${file_name}"
         else
-          printf "%${longest_file_name}s PASSED\n" "${file_name}"
+          printf "%${f_name_padding}s\tPASSED\n" "${file_name}"
         fi
       fi
     done <$base_file
