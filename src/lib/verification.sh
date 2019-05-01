@@ -13,21 +13,41 @@ compare_verification_states() {
     initiaL_verification_file_lines=$(wc -l $verification_file | grep -o "\w* ")
     current_verification_file_lines=$(wc -l "current-tracked-state" | grep -o "\w* ")
 
-    while IFS= read -r initial_state; do
-      initial_state_inode=$(echo "$initial_state" | grep -o "^\w*")
+    if [ $initiaL_verification_file_lines -ge $current_verification_file_lines ]
+    then
+      base_file="$verification_file"
+      checking_file="current-tracked-state"
+    else
+      base_file="current-tracked-state"
+      checking_file="$verification_file"
+    fi
 
-      while IFS= read -r current_state; do
-        current_state_inode=$(echo "$current_state" | grep -o "^\w*")
+    while IFS= read -r base_state
+    do
+      base_state_inode=$(echo "$base_state" | grep -o "^\w*")
 
-        if [ $initial_state_inode = $current_state_inode ]; then
-          line_mathced=true
+      inode_match="false"
+      state_verification_passed="false"
+
+      while IFS= read -r checking_state
+      do
+        checking_state_inode=$(echo "$checking_state" | grep -o "^\w*")
+
+        if [ $base_state_inode = $checking_state_inode ]
+        then
+          inode_match="true"
           if [ "$initial_state" = "$current_state" ]
           then
-            echo "file passed"
-          else
-            echo "file failed"
+            state_verification_passed="true"
           fi
         fi
-      done <"current-tracked-state"
-    done <"$verification_file"
+      done <"$checking_file"
+
+      if [ $inode_match = "false" ] || [ "$state_verification_passed" = "false" ]
+      then
+        echo "file failed"
+      else
+        echo "file passed"
+      fi
+    done <"$base_file"
 }
