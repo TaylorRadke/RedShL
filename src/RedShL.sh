@@ -14,8 +14,7 @@ get_help() {
     printf "  -h, --help\t Display a help message and exit\n"
     printf "  -o name\t Display the results on the screen also save the outputs to output file ‘name'\n"
     printf "  -t directory\t Choose the directory to track, skipping user input\n"
-    printf "  -v file\t Select a verification file to use to check against the current state
-                  instead of generating a new one\n"
+    printf "  -v file\t Select a verification file to use to check against the current state\n"
     exit
 }
 

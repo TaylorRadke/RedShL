@@ -8,6 +8,23 @@ create_verification_file() {
     printf "Verification file Created: %s\n\n" "${verification_file}"
 }
 
+progress_bar(){
+  j=0
+  percent_steps=4 #Set when to update the proress bar, e.g every 5%
+  percent_padding=$((100/percent_steps)) #Padding for progress bar between bar based on percent steps
+  percent_string=""
+
+  while [ $j -le $1 ]
+  do
+    if [ $((j % percent_steps)) -eq 0 ]
+    then
+      percent_string="$percent_string#"
+    fi
+    j=$((j + 1))
+  done
+  printf "\r[%-${percent_padding}s] (%d%%)" "$percent_string" "$1"
+
+}
 # Get the current state of the dir_tracked directory by storing attributes of its contents
 create_verification_state() {
   write_file=$1
@@ -15,8 +32,17 @@ create_verification_state() {
     rm $write_file
     touch $write_file
   fi
+  directory_file_count=$(find $dir_tracked | wc -l)
 
+  printf "\n"
+  i=1
+  percent_string=""
   find $dir_tracked | while read file; do
+
+    percentage_completion="$((($i * 100) / directory_file_count))"
+    progress_bar $percentage_completion
+
+
     file_inode=$(stat -c "%i" "$file")
     file_name=$(stat --format="%n" "$file")
 
@@ -46,5 +72,6 @@ create_verification_state() {
     fi
     #Write verification state to file
     printf "%s\n" "$file_attrs" >> $write_file
+    i=$((i + 1))
   done
 }
