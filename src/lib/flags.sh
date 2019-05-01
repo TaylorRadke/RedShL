@@ -27,6 +27,9 @@ parse_args() {
     o_flag_set=false
     c_flag_set=false
     t_flag_set=false
+    
+    output_file="results"
+    verification_file="verification"
 
     for arg
     do
