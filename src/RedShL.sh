@@ -14,7 +14,8 @@ get_help() {
     printf "  -h, --help\t Display a help message and exit\n"
     printf "  -o name\t Display the results on the screen also save the outputs to output file ‘name'\n"
     printf "  -t directory\t Choose the directory to track, skipping user input\n"
-    printf "  -v file\t Select a verification file to use to check against the current state\n"
+    printf "  -v file\t Select a verification file to use to check against the current state
+                  instead of generating a new one\n"
     exit
 }
 
@@ -23,6 +24,7 @@ help_arg_provided $@
 
 # #Parse args from commandline, from lib/flags
 parse_args "$@"
+
 
 #Program header to print
 printf "=-------------------------------------------------------------=\n"
@@ -58,11 +60,14 @@ create_verification_state "$verification_file"
 printf "\rMapping current state of directory...complete   \n"
 
 #Ask the user if they would like to begin verifyication
-while read -p "Begin verification [y/n]: " begin_verify; do
-  if [ $begin_verify = 'y' ]; then
-    verify_tracked_directory
-    break
-  else
-    printf "\033[1A\033[2K"
-  fi
-done
+if [ $v_flag_set = "false" ]
+then
+  while read -p "Begin verification [y/n]: " begin_verify; do
+    if [ $begin_verify = 'y' ]; then
+      break
+    else
+      printf "\033[1A\033[2K"
+    fi
+  done
+fi
+verify_tracked_directory
