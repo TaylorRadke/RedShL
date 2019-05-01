@@ -1,52 +1,33 @@
-
-
-
 verify_tracked_directory() {
   printf "\033[1A\033[2K"
   printf "\rBeginning verification:\n\n"
   printf "Mapping current state of directory...in progress"
   #Map the current state of the tracked directory
-  create_verification_state
+  create_verification_state "current-tracked-state"
   printf "\rMapping current state of directory...complete    \n"
-  printf "Verifiying initial state with current state\n\n"
+  printf "Verifiying initial state with current state\n"
   compare_verification_states
-  printf "Verification finished with %d failing\n" "${fail_count}"
 }
 
 compare_verification_states() {
-  fail_count=0
-  for tracked_file_inode in ${verification_inodes[@]}; do
+    initiaL_verification_file_lines=$(wc -l $verification_file | grep -o "\w* ")
+    current_verification_file_lines=$(wc -l "current-tracked-state" | grep -o "\w* ")
 
-    #Get the initial state from the initial_state hash map
-    initial_state=${initial_state_map[$tracked_file_inode]}
-    #Get the current state from file_map hash map
-    current_state=${file_map[$tracked_file_inode]}
+    while IFS= read -r initial_state; do
+      initial_state_inode=$(echo "$initial_state" | grep -o "^\w*")
 
-    #Get the file name from the initial state
-    file_name=$(cut -d "," -f2 <<< $initial_state)
-    #Take only base file name from file_name
-    file_name=$(basename $file_name)
+      while IFS= read -r current_state; do
+        current_state_inode=$(echo "$current_state" | grep -o "^\w*")
 
-    current_failed=false
-
-    #Compare initial state and current state strings
-    if [ $initial_state != $current_state ]; then
-      current_failed=true
-      fail_count=$((fail_count+1))
-    fi
-
-    #If show output set to true then print output
-    if [ $o_flag_set = true ]; then
-      printf "%$((file_name_max_length+1))s\t " "${file_name}"
-      if [ $current_failed = false ]; then
-        printf "\u2714 Passed\n"
-      else
-        printf "\u274c Failed\n"
-      fi
-    fi
-  done;
-
-  if [ $o_flag_set = true ]; then
-    printf "\n"
-  fi
+        if [ $initial_state_inode = $current_state_inode ]; then
+          line_mathced=true
+          if [ "$initial_state" = "$current_state" ]
+          then
+            echo "file passed"
+          else
+            echo "file failed"
+          fi
+        fi
+      done <"current-tracked-state"
+    done <"$verification_file"
 }

@@ -1,5 +1,3 @@
-
-
 #Optional FLAGS the user can provide, "-t", "-o","-c"
 
 #Check if the user provided the -h or --help flag
@@ -27,7 +25,7 @@ parse_args() {
     o_flag_set=false
     c_flag_set=false
     t_flag_set=false
-    
+
     output_file="results"
     verification_file="verification"
 
@@ -38,22 +36,19 @@ parse_args() {
           check_flag_missing_arg "$@"
           o_flag_set=true
           output_file="$2"
-          shift
-          shift
+          shift; shift
           ;;
         -c)
           check_flag_missing_arg "$@"
           c_flag_set=true
           verification_file="$2"
-          shift
-          shift
+          shift; shift
           ;;
         -t)
           check_flag_missing_arg "$@"
           t_flag_set=true
           dir_tracked="$2"
-          shift
-          shift
+          shift; shift
           ;;
         -*)
           printf "$0: $arg: unrecognised option\n"

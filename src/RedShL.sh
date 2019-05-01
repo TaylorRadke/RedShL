@@ -3,7 +3,7 @@
 #Import functions from lib/
 . ./lib/flags.sh
 . ./lib/state.sh
-#. ./lib/verification.sh
+. ./lib/verification.sh
 
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
@@ -62,6 +62,7 @@ printf "\rMapping current state of directory...complete   \n"
 while read -p "Begin verification [y/n]: " begin_verify; do
   if [ $begin_verify = 'y' ]; then
     verify_tracked_directory
+    break
   else
     printf "\033[1A\033[2K"
   fi
