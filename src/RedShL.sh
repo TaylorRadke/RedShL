@@ -2,7 +2,7 @@
 
 #Import functions from lib/
 . ./lib/flags.sh
-. ./lib/state_mapping.sh
+. ./lib/state.sh
 #. ./lib/verification.sh
 
 #Help function to show how the program should be called
