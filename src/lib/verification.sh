@@ -24,7 +24,8 @@ get_file_name(){
   do
     if [ $i -eq 3 ]
     then
-    file_name=$(basename $field)
+      file_name="$field"
+      base_name=$(basename $field)
     fi
     i=$((i+1))
   done
@@ -104,9 +105,11 @@ compare_verification_states() {
       then
         if [ $inode_match = "false" ] || [ "$state_verification" = "failed" ]
         then
-          printf "%${f_name_padding}s\tFAILED\n" "${file_name}"
+          printf "%${f_name_padding}s\t ✗ Failed\n" "${base_name}"
+          printf "%s,fail\n" "${file_name}" >> $output_file
         else
-          printf "%${f_name_padding}s\tPASSED\n" "${file_name}"
+          printf "%${f_name_padding}s\t ✔ Passed\n" "${base_name}"
+          printf "%s,pass\n" "${file_name}" >> $output_file
         fi
       fi
     done <$base_file

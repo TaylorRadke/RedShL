@@ -30,10 +30,9 @@ printf "=-------------------------------------------------------------=\n"
 
 printf "Need help? Try 'bash RedShL.sh --help'\n\n\n"
 
-if [ $c_flag_set = true ]; then
+if [ $c_flag_set = "true" ]; then
   create_verification_file
 fi
-
 
 #Prompt the user to enter direcotry name then store it in dir_tracked
 if [ $t_flag_set = false ]; then
