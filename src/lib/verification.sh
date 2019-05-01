@@ -4,7 +4,10 @@ verify_tracked_directory() {
   printf "Mapping current state of directory...in progress"
   #Map the current state of the tracked directory
   current_tracked_state="currenttrackedstate"
+
   create_verification_state $current_tracked_state
+  set_base_file
+  get_file_name_padding
 
   printf "\rMapping current state of directory...complete    \n"
   printf "Verifiying initial state with current state\n"
@@ -27,6 +30,7 @@ get_file_name(){
   done
 }
 
+
 set_base_file(){
   initiaL_verification_file_lines=$(wc -l "$verification_file" | grep -o "\w* ")
   current_verification_file_lines=$(wc -l "$current_tracked_state" | grep -o "\w* ")
@@ -42,9 +46,28 @@ set_base_file(){
   fi
 }
 
-compare_verification_states() {
-    set_base_file
+get_file_name_padding(){
+  longest_file_name=0
+  while IFS= read -r base_state
+  do
+    IFS=","
+    i=0
+    for field in $base_state
+    do
+      if [ $i -eq 3 ]
+      then
+        file_name=$(basename $field)
+        if [ ${#file_name} -gt $longest_file_name ]
+        then
+          longest_file_name="${#file_name}"
+        fi
+      fi
+      i=$((i+1))
+    done
+  done < $base_file
+}
 
+compare_verification_states() {
     file_verification_fail_count=0
     while IFS= read -r base_state
     do
@@ -81,9 +104,9 @@ compare_verification_states() {
       then
         if [ $inode_match = "false" ] || [ "$state_verification_passed" = "failed" ]
         then
-          printf "%s FAILED\n" "${file_name}"
+          printf "%${longest_file_name}s FAILED\n" "${file_name}"
         else
-          printf "%s PASSED\n" "${file_name}"
+          printf "%${longest_file_name}s PASSED\n" "${file_name}"
         fi
       fi
     done <$base_file
