@@ -1,7 +1,7 @@
 
 
 
-function verify_tracked_directory {
+verify_tracked_directory() {
   printf "\033[1A\033[2K"
   printf "\rBeginning verification:\n\n"
   printf "Mapping current state of directory...in progress"
@@ -13,7 +13,7 @@ function verify_tracked_directory {
   printf "Verification finished with %d failing\n" "${fail_count}"
 }
 
-function compare_verification_states {
+compare_verification_states() {
   fail_count=0
   for tracked_file_inode in ${verification_inodes[@]}; do
 

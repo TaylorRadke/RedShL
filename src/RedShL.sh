@@ -8,7 +8,7 @@
 
 #Help function to show how the program should be called
 #What options are available for the program and how they should be provided
-function get_help {
+get_help() {
     printf "Usage: bash RedShL.sh [options]\n\n"
     printf "options:\n\n"
     printf "  -c name\t Create a verification file called ‘name’ also display a message 'File created'\n\n"

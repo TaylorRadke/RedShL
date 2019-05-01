@@ -1,15 +1,15 @@
 
 
-#Optional FLAGS the user can provide
-FLAGS={"-o" "-c" "-t"}
+#Optional FLAGS the user can provide, "-t", "-o","-c"
+
 
 #Checks if given input is a flag in the FLAGS array
-function is_flag {
+is_flag() {
     is_flag_result=0
     input=$1
     #Check if the input matches any of the defined FLAGS
     for flag in ${FLAGS[@]}; do
-        if [[ $1 = $flag ]]; then
+        if [ $1 = "-c" ] || [ $1 = "-o" ] || [ $1 = "-t" ]; then
             is_flag_result=1
             return
         fi
@@ -24,7 +24,7 @@ function is_flag {
 }
 
 #Check if the user provided the --help flag
-function help_arg_provided {
+help_arg_provided() {
     for arg in "$@"; do
       if [ $arg = '-h' ] || [ $arg = "--help" ]; then
         get_help
@@ -34,7 +34,7 @@ function help_arg_provided {
 
 #parse_args gets the FLAGS provided by the user when starting the program
 #Checking if all required arguments are provided for each flag
-function parse_args {
+parse_args() {
 
     o_flag_set=false
     c_flag_set=false

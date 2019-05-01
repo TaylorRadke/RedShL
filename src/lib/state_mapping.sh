@@ -1,7 +1,7 @@
 
 
 #Verification Source for file verification
-function create_verification_file {
+create_verification_file() {
     #remove any verification file with same name if they exist
     if [ -e ${verification_file} ]; then
       rm ${verification_file}
@@ -11,7 +11,7 @@ function create_verification_file {
 }
 
 
-function map_initial_directory_state {
+map_initial_directory_state() {
   #Save the current state of the given directory for verification
   create_verification_state
   #copy file_map to initial_state_map
@@ -29,7 +29,7 @@ function map_initial_directory_state {
 
 #Get the current state of the dir_tracked directory by storing attributes
 #of its contents
-function create_verification_state {
+create_verification_state() {
   tracking_files=$(find $dir_tracked)
   file_name_max_length=0
 
