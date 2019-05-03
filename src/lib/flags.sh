@@ -34,7 +34,8 @@ parse_args() {
     verification_file="verification" # Name of verification file
 
     # Go though all elements of the parameters and check which flags were used.
-    for arg # For argument in the array of parameters...
+    # For argument in the array of parameters...
+    for arg 
     do
       case $arg in
 
