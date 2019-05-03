@@ -1,68 +1,79 @@
-#Optional FLAGS the user can provide, "-t", "-o","-c"
+# -----------------------------------------------------
+# FLAGS.SH
+# - Functions related to flag options the user can use
+# - "-t" "-o" "-c" "-v" "-h" || "--help"
+# -----------------------------------------------------
 
-#Check if the user provided the -h or --help flag
+# CHECKING IF HELP PARAMETERS WERE ENTERED (-h or --hh)
 help_arg_provided() {
-  for arg in "$@"; do
-    case $arg in
-      -h|--help)
-        get_help
+  for arg in "$@"; do # For all arguments provided
+    case $arg in 
+      -h|--help) # If the argument is -h or --help
+        get_help # Call the get help function.
       esac
   done
 }
 
+# CHECKING CORRECT PARAMETERS WERE ENTERED (2 OR MORE)
 check_flag_missing_arg(){
-  if [ $# -lt 2 ];then
+  if [ $# -lt 2 ];then # If '$#' (no of parameters) is less than 2
     printf "Error: $arg: option requires an argument\n"
     printf "Try 'sh RedShL.sh --help' for help\n"
     exit
   fi
 }
 
-#parse_args gets the FLAGS provided by the user when starting the program
-#Checking if all required arguments are provided for each flag
+# CHECKING WHICH FLAGS THE USER INPUT
 parse_args() {
-
+    # Initialise all flags
     o_flag_set="false"
     c_flag_set="false"
     t_flag_set="false"
     v_flag_set="false"
 
-    verification_file="verification"
+    verification_file="verification" # Name of verification file
 
-    for arg
+    # Go though all elements of the parameters and check which flags were used.
+    for arg # For argument in the array of parameters...
     do
       case $arg in
+
         -o)
-          check_flag_missing_arg "$@"
-          o_flag_set="true"
-          output_file="$2"
-          shift; shift
-          ;;
+          check_flag_missing_arg "$@" # Did we have 2 or more parameters?
+          o_flag_set="true" # Set that we are using the -o option command
+          output_file="$2" # Use the second parameter as the name of the output
+          shift; shift # Clear the first two parameter items ([-c, name, -t] -> [name, -t] -> [-t])..
+          ;;           # ..Already checked '-c' and don't need to check 'name'
+
         -c)
           check_flag_missing_arg "$@"
           c_flag_set="true"
-          verification_file="$2"
+          verification_file="$2" # Set verification file name to param 2 argument
           shift; shift
           ;;
+
         -t)
           check_flag_missing_arg "$@"
           t_flag_set="true"
-          dir_tracked="$2"
+          dir_tracked="$2" # Directory to be tracked will be the param 2 argument
           shift; shift
           ;;
+
         -v)
           check_flag_missing_arg "$@"
-          v_flag_set="true"
-          current_tracked_state="$2"
+          v_flag_set="true" 
+          current_tracked_state="$2" # We want to use 2nd arg as a verification file to check against current state
 
-          if [ ! -f "$current_tracked_state" ]
+          # Was a valid verification file provided?
+          if [ ! -f "$current_tracked_state" ] # If the file name does not exist...
           then
             printf "Error: $current_tracked_state: cannot find verification file\n"
             exit
           fi
           shift; shift
           ;;
-        -*)
+
+        -*) # Unrecognised option
           printf "$0: $arg: unrecognised option\n"
           printf "Try 'bash RedShL.sh --help' for help\n"
           exit
