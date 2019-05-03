@@ -1,12 +1,16 @@
 #!/bin/sh
 
-#Import functions from lib/
+# -----------------------------------------------------
+# REDSHL.SH
+# - Main of the program
+# -----------------------------------------------------
+
+# Import functions from lib/
 . ./lib/flags.sh
 . ./lib/state.sh
 . ./lib/verification.sh
 
-#Help function to show how the program should be called
-#What options are available for the program and how they should be provided
+# DISPLAYING HELP OPTIONS OF PROGRAM
 get_help() {
     printf "Usage: sh RedShL.sh [options]\n\n"
     printf "options:\n\n"
@@ -18,47 +22,46 @@ get_help() {
     exit
 }
 
-#Check if --help is provided
-help_arg_provided $@
+# Was the -h or --help parameter called?
+help_arg_provided $@ 
 
-# #Parse args from commandline, from lib/flags
+# Parse all arguments from commandline and see which flags were used
 parse_args "$@"
 
-
-#Program header to print
+# Print program header 
 printf "=-------------------------------------------------------------=\n"
 printf "|                             RedShL                          |\n"
 printf "=-------------------------------------------------------------=\n"
 printf "Need Help? Try 'sh RedShL.sh --help'\n\n"
 
+# -c option used -> create a verification folder.
 if [ $c_flag_set = "true" ]; then
   create_verification_file
 fi
 
-#Prompt the user to enter direcotry name then store it in dir_tracked
+# Get the directory name to track (If we aren't already tracking it with -t)
 if [ $t_flag_set = "false" ]; then
-  read -p "Enter a directory to monitor: " dir_tracked
+  read -p "Enter a directory to monitor: " dir_tracked # Prompt the user to enter a name. Store it in the dir_tracked.
 fi
 
-#delete previous line
-printf "\033[1A\033[2K"
+printf "\033[1A\033[2K" # Printing this will delete a previous line (1 back)
 
-#Check if dir_tracked read is a directory
-if [ -d "$dir_tracked" ]; then
+# Check if dir_tracked is actually a directory
+if [ -d "$dir_tracked" ]; then # If dir_tracked is directory (-d)
   printf "$dir_tracked:\n\n"
   printf "Mapping current state of directory...in progress"
 else
   printf "Error: $dir_tracked is not a directory\n"
   exit
 fi
-#Get the initial state of the directory dir_tracked and map its files attributes by
-#the files inode and copy it into initial_state_map
+
+# Start mapping the contents of dir_tracked to the verification file
 create_verification_state "$verification_file"
 
-#Replaced in progress line with complete
+# Replaced in progress line with complete
 printf "\rMapping current state of directory...complete   \n"
 
-#Ask the user if they would like to begin verifyication
+# Ask user if they would like to begin verification
 if [ $v_flag_set = "false" ]
 then
   while read -p "Begin verification [y/n]: " begin_verify; do
@@ -69,4 +72,6 @@ then
     fi
   done
 fi
+
+# Once the user has decided (or they have used -v) -> Verify 
 verify_tracked_directory
