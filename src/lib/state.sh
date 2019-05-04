@@ -34,8 +34,10 @@ progress_bar(){
 # STORING ATTRIBUTES OF CONTENTS TO VERIFICATION FILE
 create_verification_state() {
 
+  #Delete previous line and print mapping in progress
   printf "\033[1A\033[2K"
   printf "Mapping current state of directory...in progress"
+
   # Create a file to write to
   write_file=$1 # write file will have name of verification file
 

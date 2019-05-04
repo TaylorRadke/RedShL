@@ -43,9 +43,8 @@ fi
 if [ $t_flag_set = "false" ]; then
   #Prompt the user for directory, -e option allows for file autocompletion (bash only)
   read -e -p"Enter a directory to monitor: " dir_tracked # Prompt the user to enter a name. Store it in the dir_tracked.
+  printf "\033[1A\033[K"
 fi
-
-printf "\033[1A\033[2K" # Printing this will delete a previous line (1 back)
 
 # Check if dir_tracked is actually a directory
 if [ -d "$dir_tracked" ]; then # If dir_tracked is directory (-d)
