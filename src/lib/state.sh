@@ -1,17 +1,23 @@
-#Verification Source for file verification
+# -----------------------------------------------------
+# STATE.SH
+# - Functions related to creating an initial verification state
+# -----------------------------------------------------
+
+#CREATE NEW VERIFICATION FILE
 create_verification_file() {
-    #remove any verification file with same name if they exist
+    # Remove any existing verification files with the same name
     if [ -e ${verification_file} ]; then
       rm ${verification_file}
     fi
-    touch ${verification_file}
+    touch ${verification_file} # Create verification file
     printf "Verification file Created: %s\n\n" "${verification_file}"
 }
 
+# PROGRESS BAR
 progress_bar(){
   j=0
-  percent_steps=4 #Set when to update the proress bar, e.g every 5%
-  percent_padding=$((100/percent_steps)) #Padding for progress bar between bar based on percent steps
+  percent_steps=4 # Set when to update the proress bar, e.g every 5%
+  percent_padding=$((100/percent_steps)) # Padding for progress bar between bar based on percent steps
   percent_string=""
 
   while [ $j -le $1 ]
@@ -23,55 +29,58 @@ progress_bar(){
     j=$((j + 1))
   done
   printf "\r[%-${percent_padding}s] (%d%%)" "$percent_string" "$1"
-
 }
-# Get the current state of the dir_tracked directory by storing attributes of its contents
+
+# STORING ATTRIBUTES OF CONTENTS TO VERIFICATION FILE
 create_verification_state() {
-  write_file=$1
-  if [ -e $write_file ]; then
+
+  # Create a file to write to
+  write_file=$1 # write file will have name of verification file
+
+  if [ -e $write_file ]; then # If the file already exists, delete it and make a new one
     rm $write_file
     touch $write_file
   fi
-  directory_file_count=$(find $dir_tracked | wc -l)
-
+  
+  # Percentage bar related
+  directory_file_count=$(find $dir_tracked | wc -l) # Want the no number of files in the directory
   printf "\n"
   i=1
   percent_string=""
-  find $dir_tracked | while read file; do
 
+  # For each file in the directory...
+  find $dir_tracked | while read file; do
+    
+    # Updating percentage bar
     percentage_completion="$((($i * 100) / directory_file_count))"
     progress_bar $percentage_completion
 
+    file_inode=$(stat -c "%i" "$file") # Get inode
+    file_name=$(stat --format="%n" "$file")# Get file name
+    file_path_absolute=$(readlink -f "$file") # Get absolute path
+    file_type=$(stat --format="%F" "$file") # Get file type
+    file_owner_id=$(stat --format="%u" "$file") # Get file owner ID
+    file_group_id=$(stat --format="%g" "$file") # Get group ID
+    file_access_priviledges=$(stat --format="%A" "$file") # Get access priviledges
+    file_time_last_modified=$(stat --format="%Y" "$file") # Get time last modified
+    file_time_last_changed=$(stat --format="%Z" "$file") # Get time last changed
 
-    file_inode=$(stat -c "%i" "$file")
-    file_name=$(stat --format="%n" "$file")
-
-    file_path_absolute=$(readlink -f "$file")
-    file_type=$(stat --format="%F" "$file")
-
-    file_owner_id=$(stat --format="%u" "$file")
-    file_group_id=$(stat --format="%g" "$file")
-    file_access_priviledges=$(stat --format="%A" "$file")
-
-    #Gets the milliseconds since 01-1-1970 (epoch timestamp)
-    file_time_last_modified=$(stat --format="%Y" "$file")
-    file_time_last_changed=$(stat --format="%Z" "$file")
-
-    #Create comma delimted string of file attributes
+    # Create comma seperated string of file attributes
     file_attrs="$file_inode,$file_name,$file_type,$file_path_absolute,$file_owner_id,$file_group_id,$file_access_priviledges,$file_time_last_changed,$file_time_last_modified"
 
+    # If we have a file (not a directory) find its SHA1 and word count
     if [ -f "$file" ]; then
-        #Get sha1 and md5 digests
-        file_digest_sha1=$(openssl dgst -sha1 "$file" | sed 's/^.* //')
+        
+        file_digest_sha1=$(openssl dgst -sha1 "$file" | sed 's/^.* //') # Get SHA1 of file
+        file_word_count=$(<"$file" wc --words) # Get file word count
 
-        #Get file word count
-        file_word_count=$(<"$file" wc --words)
-
-        #Append file digest and word count to file attrs string
+        # Append SHA1 of file and word count to the string
         file_attrs="$file_attrs,$file_digest_sha1,$file_word_count"
     fi
-    #Write verification state to file
+
+    # Write verification state to file
     printf "%s\n" "$file_attrs" >> $write_file
-    i=$((i + 1))
+
+    i=$((i + 1)) # Incrememnt progress bar
   done
 }
