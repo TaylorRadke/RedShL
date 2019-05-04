@@ -35,8 +35,8 @@ progress_bar(){
 create_verification_state() {
 
   #Delete previous line and print mapping in progress
-  printf "\033[1A\033[2K"
-  printf "Mapping current state of directory...in progress"
+  #printf "\033[1A\033[2K"
+  printf "\nMapping current state of directory for $1...in progress"
 
   # Create a file to write to
   write_file=$1 # write file will have name of verification file
@@ -93,6 +93,6 @@ create_verification_state() {
 
   # Replaced in progress line with complete
   printf "\r\033[K\033[1A\033[K"
-  printf "Mapping current state of directory...complete\n\n"
+  printf "Mapping current state of directory for $1...complete\n\n"
 
 }

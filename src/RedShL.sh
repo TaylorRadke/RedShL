@@ -42,14 +42,13 @@ fi
 # Get the directory name to track (If we aren't already tracking it with -t)
 if [ $t_flag_set = "false" ]; then
   #Prompt the user for directory, -e option allows for file autocompletion (bash only)
-  read -e -p"Enter a directory to monitor: " dir_tracked # Prompt the user to enter a name. Store it in the dir_tracked.
+  read -e -p "Enter a directory to monitor: " dir_tracked 
   printf "\033[1A\033[K"
 fi
 
 # Check if dir_tracked is actually a directory
 if [ -d "$dir_tracked" ]; then # If dir_tracked is directory (-d)
   printf "$dir_tracked:\n\n"
-  printf "Mapping current state of directory...in progress"
 else
   printf "Error: $dir_tracked is not a directory\n"
   exit

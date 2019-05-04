@@ -5,9 +5,9 @@
 
 # VERIFICATION PROCESS
 verify_tracked_directory() {
-  printf "\033[2A\033[2K"
+  printf "\033[1A\033[2K\033[1D"
 
-  printf "\rBeginning verification:\n\n"
+  printf "Beginning verification:\n"
   # If we aren't using our own verification file
   if [ $v_flag_set = "false" ]
   then
@@ -15,24 +15,37 @@ verify_tracked_directory() {
     create_verification_state $current_tracked_state # Create a verification file for this tracked state
   fi
 
-  set_base_file # Find wheather [state tracking] or [verification file] had more files in it.
+  set_base_file # Find whether [state tracking] or [verification file] had more files in it.
   get_file_name_padding # Does padding such that the output is given in a nice format
   
   printf "Verifiying initial state with current state:\n\n"
   
   compare_verification_states # Compare the two states (main comparison function)
 
+  #Delete verification_file if the user did not request one to be created
   if [ $c_flag_set = "false" ]
   then
     rm $verification_file
   fi
 
+  #Delete the current tracked_state if it v flag not set because the input of -v is set to current_tracked_state
   if [ $v_flag_set = "false" ]
   then
     rm $current_tracked_state
   fi
 
-  printf "\nVerification finished with %d failing\n" "$file_verification_fail_count"
+  if [ $o_flag_set = 'true' ]
+  then
+    printf "\n"
+  fi
+
+  printf "Verification finished with %d failing\n" "$file_verification_fail_count"
+
+  if [ $o_flag_set = 'true' ]
+  then
+    printf "Results written to file: %s\n" "$output_file"
+  fi
+
 }
 
 # GET FILE NAME FROM COMMAR SEPERATED LIST
