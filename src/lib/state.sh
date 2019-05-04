@@ -34,6 +34,8 @@ progress_bar(){
 # STORING ATTRIBUTES OF CONTENTS TO VERIFICATION FILE
 create_verification_state() {
 
+  printf "\033[1A\033[2K"
+  printf "Mapping current state of directory...in progress"
   # Create a file to write to
   write_file=$1 # write file will have name of verification file
 
@@ -56,22 +58,24 @@ create_verification_state() {
     progress_bar $percentage_completion
 
     file_inode=$(stat -c "%i" "$file") # Get inode
-    file_name=$(stat --format="%n" "$file")# Get file name
-    file_path_absolute=$(readlink -f "$file") # Get absolute path
-    file_type=$(stat --format="%F" "$file") # Get file type
+    file_name=$(stat --format="%n" "$file") # Get file name
+    file_path_absolute=$(readlink -f "$file")  # Get absolute path
+    file_type=$(stat --format="%F" "$file")  # Get file type
     file_owner_id=$(stat --format="%u" "$file") # Get file owner ID
     file_group_id=$(stat --format="%g" "$file") # Get group ID
     file_access_priviledges=$(stat --format="%A" "$file") # Get access priviledges
-    file_time_last_modified=$(stat --format="%Y" "$file") # Get time last modified
-    file_time_last_changed=$(stat --format="%Z" "$file") # Get time last changed
+    file_time_last_modified=$(stat --format="%y" "$file") # Get time last modified 
+    file_time_last_changed=$(stat --format="%z" "$file") # Get time last changed
 
     # Create comma seperated string of file attributes
     file_attrs="$file_inode,$file_name,$file_type,$file_path_absolute,$file_owner_id,$file_group_id,$file_access_priviledges,$file_time_last_changed,$file_time_last_modified"
 
     # If we have a file (not a directory) find its SHA1 and word count
     if [ -f "$file" ]; then
-        
-        file_digest_sha1=$(openssl dgst -sha1 "$file" | sed 's/^.* //') # Get SHA1 of file
+        #Get SHA1 digest of file
+        file_digest_sha1=$(openssl dgst -sha1 "$file" | sed 's/^.* //')
+
+        #G
         file_word_count=$(<"$file" wc --words) # Get file word count
 
         # Append SHA1 of file and word count to the string
@@ -81,6 +85,12 @@ create_verification_state() {
     # Write verification state to file
     printf "%s\n" "$file_attrs" >> $write_file
 
-    i=$((i + 1)) # Incrememnt progress bar
+     # Incrememnt progress bar
+    i=$((i + 1))
   done
+
+  # Replaced in progress line with complete
+  printf "\r\033[K\033[1A\033[K"
+  printf "Mapping current state of directory...complete\n\n"
+
 }

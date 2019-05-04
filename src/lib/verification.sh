@@ -5,10 +5,9 @@
 
 # VERIFICATION PROCESS
 verify_tracked_directory() {
-  printf "\033[1A\033[2K"
-  printf "\rBeginning verification:\n\n"
-  printf "Mapping current state of directory...in progress"
+  printf "\033[2A\033[2K"
 
+  printf "\rBeginning verification:\n\n"
   # If we aren't using our own verification file
   if [ $v_flag_set = "false" ]
   then
@@ -18,9 +17,8 @@ verify_tracked_directory() {
 
   set_base_file # Find wheather [state tracking] or [verification file] had more files in it.
   get_file_name_padding # Does padding such that the output is given in a nice format
-
-  printf "\rMapping current state of directory...complete    \n"
-  printf "Verifiying initial state with current state\n"
+  
+  printf "Verifiying initial state with current state:\n\n"
   
   compare_verification_states # Compare the two states (main comparison function)
 
@@ -34,12 +32,12 @@ verify_tracked_directory() {
     rm $current_tracked_state
   fi
 
-  printf "Verification finished with %d failing\n" "$file_verification_fail_count"
+  printf "\nVerification finished with %d failing\n" "$file_verification_fail_count"
 }
 
 # GET FILE NAME FROM COMMAR SEPERATED LIST
 get_file_name(){
-  IFS="," # Removes the commars
+  IFS="," # Set the internal field seperator to comma
   i=0
   for field in $base_state
   do
@@ -52,7 +50,7 @@ get_file_name(){
   done
 }
 
-# CHECK WHICH DIRECTORY HAS THE MOST FILES IN IT
+# CHECK WHICH VERIFICATION STATE CONTAINS THE MOST FILES
 # This means that we won't miss any files if the new (potentially changed) directory
 # happend to have more lines in it.
 set_base_file(){
@@ -72,29 +70,23 @@ set_base_file(){
 
 # ADDS PADDING TO FORMAT OUTPUT
 # E.g.
-#          file1       passed
-#          file2       passed
-#/a/b/dir/file         failed
+#        file1   passed
+#        file2   passed
+#/a/b/dir/file   failed
 # As we see, all the filenames and pass/fails meet up
 get_file_name_padding(){
   f_name_padding=0
   while IFS= read -r base_state
   do
-    IFS=","
-    i=0
-    for field in $base_state
-    do
-      if [ $i -eq 3 ]
-      then
-        file_name=$(basename $field)
-        if [ ${#file_name} -gt $f_name_padding ]
-        then
-          f_name_padding="${#file_name}"
-        fi
-      fi
-      i=$((i+1))
-    done
+    get_file_name
+    if [ ${#base_name} -gt $f_name_padding ]
+    then
+      f_name_padding="${#base_name}"
+    fi
   done < $base_file
+
+  #Adding a space to left of longest file
+  f_name_padding=$((f_name_padding + 1))
 }
 
 # COMPARE VERIFICATION

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # -----------------------------------------------------
 # REDSHL.SH
@@ -41,7 +41,8 @@ fi
 
 # Get the directory name to track (If we aren't already tracking it with -t)
 if [ $t_flag_set = "false" ]; then
-  read -p "Enter a directory to monitor: " dir_tracked # Prompt the user to enter a name. Store it in the dir_tracked.
+  #Prompt the user for directory, -e option allows for file autocompletion (bash only)
+  read -e -p"Enter a directory to monitor: " dir_tracked # Prompt the user to enter a name. Store it in the dir_tracked.
 fi
 
 printf "\033[1A\033[2K" # Printing this will delete a previous line (1 back)
@@ -58,8 +59,6 @@ fi
 # Start mapping the contents of dir_tracked to the verification file
 create_verification_state "$verification_file"
 
-# Replaced in progress line with complete
-printf "\rMapping current state of directory...complete   \n"
 
 # Ask user if they would like to begin verification
 if [ $v_flag_set = "false" ]
@@ -68,7 +67,7 @@ then
     if [ $begin_verify = 'y' ]; then
       break
     else
-      printf "\033[1A\033[2K"
+      printf "\033[1A\033[K"
     fi
   done
 fi
