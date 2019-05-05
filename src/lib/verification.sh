@@ -34,7 +34,7 @@ verify_tracked_directory() {
     rm $current_tracked_state
   fi
 
-  if [ $o_flag_set = 'true' ]
+  if [ $o_flag_set = 'true' ] || [ $display_results_flag_set = "true" ]
   then
     printf "\n"
   fi
@@ -139,16 +139,27 @@ compare_verification_states() {
         file_verification_fail_count=$((file_verification_fail_count+1))
       fi
 
-      # Output this if we have the -o flag.
-      if [ $o_flag_set = "true" ]
+      # Output this if we have the -o  or --display-results flag set.
+      if [ "$display_results_flag_set" = "true" ]
       then
         if [ $inode_match = "false" ] || [ "$state_verification" = "failed" ]
         then
+
           printf "%${f_name_padding}s\t ✗ Failed\n" "${base_name}"
-          printf "%s,fail\n" "${file_name}" >> $output_file
+
+          if [ "$o_flag_set" = "true" ]
+          then
+            printf "%s,fail\n" "${file_name}" >> $output_file
+          fi
         else
+
           printf "%${f_name_padding}s\t ✔ Passed\n" "${base_name}"
-          printf "%s,pass\n" "${file_name}" >> $output_file
+
+          if [ "$o_flag_set" = "true" ]
+          then
+            printf "%s,pass\n" "${file_name}" >> $output_file
+          fi
+
         fi
       fi
     done <$base_file
