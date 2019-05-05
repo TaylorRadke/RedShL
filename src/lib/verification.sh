@@ -153,7 +153,7 @@ compare_verification_states() {
         if [ $inode_match = "false" ] || [ "$state_verification" = "failed" ]
         then
 
-          printf "%2d\t%${f_name_padding}s\t✗ Failed\n" "$file_count" "${file_name}"
+          printf "%2d\t%${f_name_padding}s\t ✗ Failed\n" "$file_count" "${file_name}"
 
           if [ "$o_flag_set" = "true" ]
           then
