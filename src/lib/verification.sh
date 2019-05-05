@@ -49,16 +49,25 @@ verify_tracked_directory() {
 }
 
 # GET FILE NAME FROM COMMAR SEPERATED LIST
-get_file_name(){
+get_file_attrs(){
   IFS="," # Set the internal field seperator to comma
   i=0
   for field in $base_state
   do
-    if [ $i -eq 3 ]
-    then
-      file_name="$field"
-      base_name=$(basename $field)
-    fi
+    case $i in
+      0)
+        file_node="$field"
+        ;;
+      1)
+        file_name="$field"
+        ;;
+      2)
+        file_type="$field"
+        ;;
+      3)
+        file_absolute_path="$field"
+        ;;
+    esac
     i=$((i+1))
   done
 }
@@ -91,24 +100,23 @@ get_file_name_padding(){
   f_name_padding=0
   while IFS= read -r base_state
   do
-    get_file_name
-    if [ ${#base_name} -gt $f_name_padding ]
+    get_file_attrs 
+    if [ ${#file_name} -gt $f_name_padding ]
     then
-      f_name_padding="${#base_name}"
+      f_name_padding="${#file_name}"
     fi
   done < $base_file
-
-  #Adding a space to left of longest file
-  f_name_padding=$((f_name_padding + 1))
 }
 
 # COMPARE VERIFICATION
 compare_verification_states() {
     file_verification_fail_count=0
+    file_count=1 #Counter to display current file number 
+
     while IFS= read -r base_state # For each line of our base state (each file/dir)...
     do
       base_state_inode=$(echo "$base_state" | grep -o "^\w*") # Grab the inode
-      get_file_name
+      get_file_attrs
       inode_match="false"
 
       while IFS= read -r checking_state # For each line of our checking file (each file/dir)
@@ -145,22 +153,22 @@ compare_verification_states() {
         if [ $inode_match = "false" ] || [ "$state_verification" = "failed" ]
         then
 
-          printf "%${f_name_padding}s\t ✗ Failed\n" "${base_name}"
+          printf "%2d\t%${f_name_padding}s\t✗ Failed\n" "$file_count" "${file_name}"
 
           if [ "$o_flag_set" = "true" ]
           then
-            printf "%s,fail\n" "${file_name}" >> $output_file
+            printf "%s,fail\n" "${file_absolute_path}" >> $output_file
           fi
         else
 
-          printf "%${f_name_padding}s\t ✔ Passed\n" "${base_name}"
+          printf "%2d\t%${f_name_padding}s\t ✔ Passed\n" "$file_count" "${file_name}"
 
           if [ "$o_flag_set" = "true" ]
           then
-            printf "%s,pass\n" "${file_name}" >> $output_file
+            printf "%s,pass\n" "${file_absolute_path}" >> $output_file
           fi
-
         fi
       fi
+      file_count=$((file_count + 1))
     done <$base_file
 }

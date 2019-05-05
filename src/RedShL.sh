@@ -49,7 +49,7 @@ fi
 
 # Check if dir_tracked is actually a directory
 if [ -d "$dir_tracked" ]; then # If dir_tracked is directory (-d)
-  printf "Tracking %s:\n\n" "$(readlink -f $dir_tracked)"
+  printf "%s:\n" "$(readlink -f $dir_tracked)"
 else
   printf "Error: $dir_tracked is not a directory\n"
   exit
