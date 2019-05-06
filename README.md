@@ -8,3 +8,4 @@
 | -t directory  | Choose a directory to track (skipping user input)  |
 | -v file  | Select a pre-existing verification file to use against the current state  |
 | --help or -h  | Display a help message explaining how to use the program  |
+| --display-results | Displays the results of verification on screen. This will avoid having to create an output file. |
