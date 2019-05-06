@@ -48,13 +48,13 @@ parse_args() {
           check_flag_args "$@" # Did we have 2 or more parameters?
           o_flag_set="true" # Set that we are using the -o option command
           output_file="$2" # Use the second parameter as the name of the output
+          display_results_flag_set="true"
           shift; shift # Clear the first two parameter items ([-c, name, -t] -> [name, -t] -> [-t])..
           ;;           # ..Already checked '-c' and don't need to check 'name'
 
         -c)
           check_flag_args "$@"
           c_flag_set="true"
-          display_results_flag_set="true"
           verification_file="$2" # Set verification file name to param 2 argument
           shift; shift
           ;;
