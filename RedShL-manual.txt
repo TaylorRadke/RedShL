@@ -1,0 +1,71 @@
+=-----------------------------------------------------------------------------------=
+|                                RedShL operating manual                            |
+=-----------------------------------------------------------------------------------=
+|                                        _______                                    |
+|                                       /__(_)__\                                   |
+|                                      // \___/ \\                                  |
+|                                     ||\ /Red\ /||                                 |
+|                                     || | ShL | ||                                 |
+|                                     ||/ \___/ \||                                 |
+|                                      \\_/___\_//                                  |
+|                                       \-------/                                   |
+|       How to use:                                                                 |
+|                                                                                   |
+|       > To use this program the user should place the RedShL-master folder        |
+|         close (for ease of access) to the directory that is intended for          |
+|         observation.                                                              |
+|                                                                                   |
+|       > Please note: RedShL.sh should be run by writing sh RedShL.sh              |
+|         [arguments] with the terminal pointing towards the                        |
+|         RedShL-master/src directory.                                              |
+|                                                                                   |
+|       > Please note: any and all directories given to RedShL.sh must be           |
+|         given relative to it's position, e.g. if the directory is outside         |
+|         the RedShL folders the user must first "..\.." to back out of the         |
+|         the folders.                                                              |
+|                                                                                   |
+|       > Now that you have RedShL in the desired place operate it using one        |
+|         of the operating arguments:                                               |
+|                                                                                   |
+|       [ --help or -h ] - } This argument will make RedShL display a               |
+|                            shortened (and more concise) version of the            |
+|                            information that can be found here.                    |
+|                                                                                   |
+|       [ -c (name) ]   -  } This argument will make RedShL create a .txt file      |
+|                            using the input (name). upon the creation of the       |
+|                            verification file RedShL will prompt the user to       |
+|                            input the directory they want monitored and RedShL     |
+|                            will fill file with current states and relevant        |
+|                            information on the files / folders that can be         |
+|                            found on the given directory's tree. once RedShL       |
+|                            has gathered the necessary info it will prompt the     |
+|                            user asking them if they want it to run a              |
+|                            verification scan of the directory now, if the user    |
+|                            selects no the program will quit however if yes is     |
+|                            is selected RedShL will do the normal behaviors        |
+|                            invoked by -v, scanning the directory given to it      |
+|                            by the user and comparing it against the               |
+|                            verification file it created.                          |
+|                                                                                   |
+|       [ -t (name) ]   -  } This argument will make RedShL skip the usual step     |
+|                            of requesting a directory to watch from the user,      |
+|                            instead RedShL will gain this information from         |
+|                            (name) in the -t argument.                             |
+|                                                                                   |
+|       [ -v (name) ]   -  } This argument will make RedShL run through it's        |
+|                            verification process taking the targeted directory     |
+|                            from the user through the usual prompt or through      |
+|                            -t if it's supplied. it will gather the relevant       |
+|                            information from the files in the directory's tree     |
+|                            and compare it against the information that can be     |
+|                            found in the verification file which is supplied by    |
+|                            the user within the (name) of the -v argument.         |
+|                                                                                   |
+|       [ -o (name) ]   -  } This argument can be added any time RedShL is          |
+|                            carrying out the verification process, it's            |
+|                            addition will cause RedShL to output a text file       |
+|                            containing in depth results of the verification        |
+|                            process, with file name being input within the         |
+|                            (name) of the -o argument.                             |
+|                                                                                   |
+=-----------------------------------------------------------------------------------=
